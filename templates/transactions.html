@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <h2>Transactions</h2>
+    <h1>Transactions</h1>
 
     {% for transaction in transactions %}
-        {{ transaction.purchase_date }}<br>
-        {{ transaction.ticker }}<br>
-        {{ transaction.money_amount }}<br>
+        <h4>Purchase Date</h4>{{ transaction.purchase_date }}<br>
+        <h4>Stock Ticker</h4>{{ transaction.ticker }}<br>
+        <h4>Amount</h4>{{ transaction.money_amount }}<br>
+        <br>
+        <h4>Price per Stock</h4>
+        {{ stock[0]['2021-02-18']["4. close"] }}
     {% endfor %}
 
 {% endblock %}
