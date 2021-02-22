@@ -22,7 +22,6 @@ body {
     font-family: Merriweather;   
     font-size: 4rem; 
     font-weight: bold;
-    text-shadow: rgb(155, 155, 241) 10px 10px 10px;
     -webkit-text-stroke: 0.5px rgb(255, 255, 255);
     text-align: center;
     margin-top: 20px;
@@ -41,4 +40,9 @@ body {
 .btn-large {
     background-color: blue;
     margin-bottom: 20px;
+}
+
+#register-btn:hover {
+    text-decoration: none;
+    color: white;
 }

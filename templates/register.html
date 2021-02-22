@@ -1,0 +1,37 @@
+{% extends "log.html" %}
+{% block content %}
+    <h3 class="center-align">Create an account</h3>
+    <p class="center-align">Just insert your details to create a free account and start practice your investment skills.</p>
+    <div class="row">
+        <form class="col s12" method="POST" action="{{ url_for('register') }}">
+            <div class="row">
+                <div class="input-field col s6">
+                    <i class="fas fa-signature prefix light-gray-text"></i>
+                    <input id="first_name" name="first_name" type="text" class="validate">
+                    <label for="first_name">First Name</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="last_name" name="last_name" type="text" class="validate">
+                    <label for="last_name">Last Name</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="fas fa-user-plus prefix light-gray-text"></i>
+                    <input id="username" name="username" type="text" class="validate">
+                    <label for="username">Username</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="fas fa-unlock-alt prefix light-gray-text"></i>
+                    <input id="password" name="password" type="password" class="validate">
+                    <label for="password">Password</label>
+                </div>
+            </div>
+            <div class="center-align">
+                <button class="waves-effect waves-light btn-large" type="submit" id="register-btn"><i class="fas fa-user-plus right"></i>Register</button> 
+            </div> 
+        </form>
+    </div>
+{% endblock %}
