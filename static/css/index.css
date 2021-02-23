@@ -42,7 +42,36 @@ body {
     margin-bottom: 20px;
 }
 
-#register-btn:hover {
+.custom-btn:hover {
     text-decoration: none;
     color: white;
+}
+
+#flash-messages {
+    height:100px;
+    background-color: pink;
+    color: black;
+}
+
+.fa-exclamation-triangle {
+    color: black;
+    font-size: 2rem;
+}
+
+.fa-check {
+    color: black;
+}
+
+#registration-form {
+    margin-left: 450px;
+    margin-right: 450px;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.margins-10 {
+    margin: 10px;
 }

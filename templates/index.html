@@ -1,21 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/css/index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
-    <title>My Broker</title>
-</head>
-<body>
+{% extends "log.html" %}
+{% block content %}
     <div id="introBox" class="center-align">
-        <h1>Welcome to "My Broker"</h1>
+        <h1>MY BROKER</h1>
         <p>It's not only my broker but it's also yours, in fact it's everyone's!</p> 
         <p>This broker was created for educational purposes. You can use it to practice your analytics and investment skills.</p> 
         <p>Give it a try! No real money involved so no loss can occur!</p>  
-        <a class="waves-effect waves-light btn-large" href="{{ url_for('register') }}"><i class="fas fa-user-plus right"></i>Create Account</a> 
-        <a class="waves-effect waves-light btn-large" href=""><i class="fas fa-sign-in-alt right"></i>Log In</a>  <!--LOGIN HTML STILL TO BE CREATED, use card panels from materialize-->
+        <a class="waves-effect waves-light btn-large custom-btn" href="{{ url_for('register') }}"><i class="fas fa-user-plus right"></i>Create Account</a> 
+        <a class="waves-effect waves-light btn-large custom-btn" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt right"></i>Log In</a>  <!--LOGIN HTML STILL TO BE CREATED, use card panels from materialize-->
     </div>    
-</body>
-</html>
+{% endblock %}
