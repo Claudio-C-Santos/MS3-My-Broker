@@ -19,6 +19,9 @@ app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("Flask_Secret_Key")
 
+# FUNDS AVAILABLE
+# funds_available = 100
+
 mongo = PyMongo(app)
 
 
@@ -47,15 +50,78 @@ def register():
         mongo.db.users.insert_one(register)
 
         session["user"] = request.form.get("username").lower()
-        flash("Registration Successful")
+        first_name = mongo.db.users.find_one(
+            {"username": session["user"]})["first_name"]
+        return render_template(
+            "profile.html",
+            username=session["user"], first_name=first_name)
     return render_template("register.html")
 
 
 @app.route("/login", methods={"GET", "POST"})
 def login():
+    if request.method == "POST":
+        # check if username is in database
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+
+        if existing_user:
+            # confirm password
+            if check_password_hash(
+                existing_user["password"], request.form.get("password")):
+                    session["user"] = request.form.get("username").lower()
+                    first_name = mongo.db.users.find_one(
+                        {"username": session["user"]})["first_name"]
+                    return render_template(
+                        "profile.html",
+                        username=session["user"], first_name=first_name)
+
+            else:
+                # password doesn't match
+                flash("Incorrect Username and/or Password")
+                return redirect("login")
+        else:
+            # username doesn't match
+            flash("Incorrect Username and/or Password")
+            return redirect(url_for("login"))
+
     return render_template("login.html")
 
 
+@app.route("/profile/<username>", methods=["GET", "POST"])
+def profile(username):
+    # use the sessions's data from db
+    username = mongo.db.users.find_one(
+        {"username": session["user"]})["username"]
+
+    first_name = mongo.db.users.find_one(
+        {"username": session["user"]})["first_name"]
+
+    if session["user"]:
+        return render_template(
+            "profile.html", username=username, first_name=first_name)
+
+    return render_template("login")
+
+
+# FUNDS AVAILABLE
+'''
+@app.route("profile/<funds_available>")
+def funds_available(funds_available):
+    funds_available = funds_available
+
+    return render_template("profile.html", funds_available=funds_available)
+'''
+
+
+@app.route("/logout")
+def logout():
+    # remove user's session cookie
+    flash("You have been logged out")
+    return redirect(url_for("login"))
+
+
+# decorate testing connection to MongoDB and Alpha Advantage API
 @app.route("/get_transactions")
 def get_transactions():
     transactions = mongo.db.transactions.find()

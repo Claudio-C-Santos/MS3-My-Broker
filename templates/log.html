@@ -43,7 +43,7 @@
                         {% with messages = get_flashed_messages() %}
                             {% if messages %}
                                 {% for message in messages %}
-                                    {% if message == "Username already exists" %}
+                                    {% if message == "Username already exists" or message == "Incorrect Username and/or Password" %}
                                     <div class="row">
                                         <div class="col-2 center">
                                             <div class="card-panel red accent-4">
@@ -51,13 +51,21 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {% elif message == "Registration Successful" %}
+                                    {% elif message == "Registration Successful"%}
                                     <div class="row">
                                         <div class="col-2 center">
                                             <div class="card-panel green accent-4">
                                                 <i class="fas fa-check"></i><span class="white-text center-align">   {{ message }}</span>
                                                 <br>
-                                                <button class="waves-effect waves-light btn margins-10" type="submit" href="{{ url_for('get_transactions') }}"><i class="fas fa-user-plus right"></i>Login</button>
+                                                <a class="waves-effect waves-light btn margins-10" href="{{ url_for('login') }}"><i class="fas fa-user-plus right"></i>Login</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% elif message =="You have been logged out" %}
+                                    <div class="row">
+                                        <div class="col-2 center">
+                                            <div class="card-panel blue-grey lighten-3">
+                                                <span class="white-text center-align">{{ message }}</span>
                                             </div>
                                         </div>
                                     </div>

@@ -1,1 +1,8 @@
-[] build login interface
+[] Display value in var funds_available
+
+[] Optional: Add a viewing mode that user can see dashboard without logging in, some features will be limited. (idea: only display analysis feature)
+
+
+
+- Urgent Questions
+[] How to use variable funds_available??
