@@ -19,7 +19,7 @@
         <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark">
     
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('profile', username=session['user']) }}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('profile', username=session['user'], transactions=TRANSACTIONS) }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="far fa-user"></i>
                 </div>
@@ -31,7 +31,7 @@
     
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('profile', username=session['user']) }}">
+                <a class="nav-link" href="{{ url_for('profile', username=session['user'], transactions=TRANSACTIONS) }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -46,7 +46,7 @@
     
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                <a class="nav-link collapsed" href="{{ url_for('profile', username=session['user'], transactions=TRANSACTIONS, stock=STOCK) }}" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-chart-line"></i>
                     <span>Stocks</span>

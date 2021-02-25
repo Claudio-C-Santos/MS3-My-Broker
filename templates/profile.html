@@ -56,4 +56,28 @@
             </div>
         </div>
     </div>
+
+    {% for transaction in transactions %}
+        <div class="row" id="stock_preview">
+            <div class="col s2">
+                {{ transaction.ticker }}
+            </div>
+            <div class="col s2">
+                {{ transaction.purchase_date }}
+            </div>
+            <div class="col s2">
+                {{ transaction.purchase_price }}
+            </div>
+            <div class="col s2">
+                {{ transaction.stock_amount }}
+            </div>
+            <div class="col s2">
+                {{ transaction.money_amount }}
+            </div>
+            <div class="col s2">
+                {{ transaction.stock_amount }} * {{ transaction.purchase_price }}
+            </div>
+        </div>
+    {% endfor %}
+
 {% endblock %}

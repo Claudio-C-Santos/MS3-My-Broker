@@ -13,7 +13,7 @@ if os.path.exists("env.py"):
 
 app = Flask(__name__)
 
-app_alpha = TimeSeries("Q6C1O1J04IYQXEUN")
+app_alpha = TimeSeries("Alpha_Advantage_key")
 
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
@@ -23,6 +23,13 @@ app.secret_key = os.environ.get("Flask_Secret_Key")
 # funds_available = 100
 
 mongo = PyMongo(app)
+
+
+# Global Variables
+# Retrieve all data from mongoDB's "transactions" entries
+TRANSACTIONS = mongo.db.transactions.find()
+# Retrieve stock info from Alpha Advantage API
+STOCK = app_alpha.get_daily_adjusted("IBM")
 
 
 @app.route("/")
@@ -54,12 +61,17 @@ def register():
             {"username": session["user"]})["first_name"]
         return render_template(
             "profile.html",
-            username=session["user"], first_name=first_name)
+            username=session["user"],
+            first_name=first_name,
+            transactions=TRANSACTIONS)
     return render_template("register.html")
 
 
 @app.route("/login", methods={"GET", "POST"})
 def login():
+    # Retrieve all data from mongoDB's "transactions" entries
+    global TRANSACTIONS
+
     if request.method == "POST":
         # check if username is in database
         existing_user = mongo.db.users.find_one(
@@ -72,12 +84,17 @@ def login():
                     session["user"] = request.form.get("username").lower()
                     first_name = mongo.db.users.find_one(
                         {"username": session["user"]})["first_name"]
+                    # return template with username,
+                    # first_name, transactions and stock
+                    # The last two are from API.
                     return render_template(
                         "profile.html",
-                        username=session["user"], first_name=first_name)
+                        username=session["user"],
+                        first_name=first_name,
+                        transactions=TRANSACTIONS)
 
             else:
-                # password doesn't match
+                # if the password doesn't match
                 flash("Incorrect Username and/or Password")
                 return redirect("login")
         else:
@@ -99,19 +116,11 @@ def profile(username):
 
     if session["user"]:
         return render_template(
-            "profile.html", username=username, first_name=first_name)
+            "profile.html", username=username,
+            first_name=first_name,
+            transactions=TRANSACTIONS)
 
     return render_template("login")
-
-
-# FUNDS AVAILABLE
-'''
-@app.route("profile/<funds_available>")
-def funds_available(funds_available):
-    funds_available = funds_available
-
-    return render_template("profile.html", funds_available=funds_available)
-'''
 
 
 @app.route("/logout")
@@ -121,14 +130,24 @@ def logout():
     return redirect(url_for("login"))
 
 
-# decorate testing connection to MongoDB and Alpha Advantage API
+'''
 @app.route("/get_transactions")
 def get_transactions():
     transactions = mongo.db.transactions.find()
-    stock = app_alpha.get_daily_adjusted("AAPL")
+    stock = app_alpha.get_daily_adjusted("IBM")
     return render_template(
-                            "transactions.html",
-                            transactions=transactions, stock=stock)
+                            "profile.html",
+                            transactions=TRANSACTIONS, stock=STOCK)
+
+
+# FUNDS AVAILABLE
+
+@app.route("profile/<funds_available>")
+def funds_available(funds_available):
+    funds_available = funds_available
+
+    return render_template("profile.html", funds_available=funds_available)
+'''
 
 
 if __name__ ==   "__main__":

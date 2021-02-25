@@ -9,7 +9,11 @@
         <h4>Amount</h4>{{ transaction.money_amount }}<br>
         <br>
         <h4>Price per Stock</h4>
-        {{ stock[0]['2021-02-18']["4. close"] }}
+        {{ stock[0]['2021-02-23']["4. close"] }}
     {% endfor %}
+
+    <div class="row">
+        {{ transactions }}
+    </div>
 
 {% endblock %}

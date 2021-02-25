@@ -76,6 +76,10 @@ body {
     margin: 10px;
 }
 
+#stock_preview {
+    border: 2px solid black;
+}
+
 @media screen and (min-width: 425px) and (max-width: 1025px){
 
 #registration-form {
