@@ -70,7 +70,7 @@ def register():
 @app.route("/login", methods={"GET", "POST"})
 def login():
     # Retrieve all data from mongoDB's "transactions" entries
-    global TRANSACTIONS
+    TRANSACTIONS = mongo.db.transactions.find()
 
     if request.method == "POST":
         # check if username is in database
@@ -107,6 +107,9 @@ def login():
 
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
+    # Retrieve all data from mongoDB's "transactions" entries
+    TRANSACTIONS = mongo.db.transactions.find()
+
     # use the sessions's data from db
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
@@ -127,6 +130,7 @@ def profile(username):
 def logout():
     # remove user's session cookie
     flash("You have been logged out")
+    session.pop("user")
     return redirect(url_for("login"))
 
 
