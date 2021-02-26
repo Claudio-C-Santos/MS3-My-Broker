@@ -46,7 +46,9 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-m font-weight-bold text-info text-uppercase mb-1">Open Positions</div>
-                            <div class="h3 mb-0 font-weight-bold text-gray-800">Count</div>
+                            <div class="h3 mb-0 font-weight-bold text-gray-800">
+                                {{ transactions.count() }}
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-bullseye fa-2x text-gray-300"></i>
@@ -57,9 +59,18 @@
         </div>
     </div>
 
+    <div class="row positions_title py-2">
+            <div class="col s2 "><b>Symbol</b></div>
+            <div class="col s2"><b>Purchase Date</b></div>
+            <div class="col s2"><b>Unit Price</b></div>
+            <div class="col s2"><b>Amount of Stocks</b></div>
+            <div class="col s2"><b>Funds Used</b></div>
+            <div class="col s2"><b>Profi/Loss</b></div>
+        </div>
+
     {% for transaction in transactions %}
-        <div class="row" id="stock_preview">
-            <div class="col s2">
+        <div class="row shadow py-2">
+            <div class="col s2 ">
                 {{ transaction.ticker }}
             </div>
             <div class="col s2">
@@ -72,11 +83,11 @@
                 {{ transaction.stock_amount }}
             </div>
             <div class="col s2">
-                {{ transaction.money_amount }}
-            </div>
-            <div class="col s2">
                 {{ transaction.stock_amount }} * {{ transaction.purchase_price }}
             </div>
+            <div class="col s2">
+                to build
+            </div>            
         </div>
     {% endfor %}
 

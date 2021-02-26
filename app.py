@@ -29,7 +29,7 @@ mongo = PyMongo(app)
 # Retrieve all data from mongoDB's "transactions" entries
 TRANSACTIONS = mongo.db.transactions.find()
 # Retrieve stock info from Alpha Advantage API
-STOCK = app_alpha.get_daily_adjusted("IBM")
+# STOCK = app_alpha.get_daily_adjusted("IBM")
 
 
 @app.route("/")
