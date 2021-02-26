@@ -1,4 +1,16 @@
-[] Display value in var funds_available
+[] Profile
+    [] Display funds available
+        NOTE: Tried to create a variable inside the decorator and pass it when rendering the template but it didn't work
+    [] Display total profit/loss
+    [] Display Funds Use
+        [] How to make calculation using the jinja templates
+    [] Display profit/loss per position open
+
+[] Stocks Page
+
+[] Cryptocurrencies page
+
+[] Open Positions
 
 [] Optional: Add a viewing mode that user can see dashboard without logging in, some features will be limited. (idea: only display analysis feature)
 

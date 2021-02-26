@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content%}
+    <div class="row positions_title py-2">
+        <div class="col s2 "><b>Company</b></div>
+        <div class="col s2 "><b>Symbol</b></div>
+        <div class="col s2"><b>Open Price</b></div>
+        <div class="col s2"><b>High</b></div>
+        <div class="col s2"><b>Low</b></div>
+        <div class="col s2"><b>Closing Price</b></div>
+        <div class="col s2"></div>
+    </div>
+
+
+    <div class="row shadow py-2">
+        <div class="col s2 stock-quotes">
+            <b>Apple Inc</b>
+        </div>
+        <div class="col s2 stock-quotes">
+            AAPL
+        </div>
+        <div class="col s2 stock-quotes">
+            &#36 {{ stock_ibm[0][yesterday]['1. open']|float|round(2, 'floor')  }}
+        </div>
+        <div class="col s2 stock-quotes">
+            &#36 {{ stock_ibm[0][yesterday]['2. high']|float|round(2, 'floor') }}
+        </div>
+        <div class="col s2 stock-quotes">
+            &#36 {{ stock_ibm[0][yesterday]['3. low']|float|round(2, 'floor')  }}
+        </div>
+        <div class="col s2 stock-quotes">
+            &#36 {{ stock_ibm[0][yesterday]['4. close']|float|round(2, 'floor')  }}
+        </div>
+        <div class="col s2">
+            <a class="waves-effect waves-light btn-small green" href="{{ url_for('buy_stocks') }}" id="buy-stock-btn">Buy</a>
+        </div>
+    </div>
+{% endblock %}
+
+

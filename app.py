@@ -7,6 +7,7 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from alpha_vantage.timeseries import TimeSeries
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime, timedelta
 if os.path.exists("env.py"):
     import env
 
@@ -23,13 +24,6 @@ app.secret_key = os.environ.get("Flask_Secret_Key")
 # funds_available = 100
 
 mongo = PyMongo(app)
-
-
-# Global Variables
-# Retrieve all data from mongoDB's "transactions" entries
-TRANSACTIONS = mongo.db.transactions.find()
-# Retrieve stock info from Alpha Advantage API
-# STOCK = app_alpha.get_daily_adjusted("IBM")
 
 
 @app.route("/")
@@ -124,6 +118,39 @@ def profile(username):
             transactions=TRANSACTIONS)
 
     return render_template("login")
+
+
+@app.route("/stocks")
+def stocks():
+    # use the sessions's data from db
+    username = mongo.db.users.find_one(
+        {"username": session["user"]})["username"]
+
+    # Retrieve stock info from Alpha Advantage API
+    stock_ibm = app_alpha.get_daily_adjusted("AAPL")
+
+    yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+
+    return render_template("stocks.html",
+                            username=username,
+                            stock_ibm=stock_ibm, yesterday=yesterday)
+
+
+@app.route("/buy_stocks")
+def buy_stocks():
+    # use the sessions's data from db
+    username = mongo.db.users.find_one(
+        {"username": session["user"]})["username"]
+
+    # Retrieve stock info from Alpha Advantage API  
+    stock_ibm = app_alpha.get_daily_adjusted("AAPL")
+
+    yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+
+    return render_template("buy_stocks.html",
+                            username=username,
+                            stock_ibm=stock_ibm,
+                            yesterday=yesterday)
 
 
 @app.route("/logout")
