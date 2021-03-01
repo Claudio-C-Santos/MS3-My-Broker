@@ -11,11 +11,13 @@ from datetime import date, datetime, timedelta
 if os.path.exists("env.py"):
     import env
 
-
+# instancing Flask
 app = Flask(__name__)
 
+# instancing Alpha Advantage API in order to retrieve quotes
 app_alpha = TimeSeries("Alpha_Advantage_key")
 
+# instancing access to MongoDB database
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("Flask_Secret_Key")
