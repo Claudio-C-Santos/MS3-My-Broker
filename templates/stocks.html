@@ -19,21 +19,57 @@
             AAPL
         </div>
         <div class="col s2 stock-quotes">
-            &#36 {{ stock_ibm[0][yesterday]['1. open']|float|round(2, 'floor')  }}
+            &#36 {{ stock_aapl[0][yesterday]['1. open']|float|round(2, 'floor')  }}
         </div>
         <div class="col s2 stock-quotes">
-            &#36 {{ stock_ibm[0][yesterday]['2. high']|float|round(2, 'floor') }}
+            &#36 {{ stock_aapl[0][yesterday]['2. high']|float|round(2, 'floor') }}
         </div>
         <div class="col s2 stock-quotes">
-            &#36 {{ stock_ibm[0][yesterday]['3. low']|float|round(2, 'floor')  }}
+            &#36 {{ stock_aapl[0][yesterday]['3. low']|float|round(2, 'floor')  }}
         </div>
         <div class="col s2 stock-quotes">
-            &#36 {{ stock_ibm[0][yesterday]['4. close']|float|round(2, 'floor')  }}
+            &#36 {{ stock_aapl[0][yesterday]['4. close']|float|round(2, 'floor')  }}
         </div>
         <div class="col s2">
-            <a class="waves-effect waves-light btn-small green" href="{{ url_for('buy_stocks') }}" id="buy-stock-btn">Buy</a>
+            <a class="waves-effect waves-light btn-small green modal-trigger" href="#modal1" id="buy-stock-btn">Buy</a>
+        </div>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <div class="col s12">
+                <form class="col s12" method="POST" action="">
+                    <div class="row">
+                        <div class="col s6">
+                            <label class="center_label" for="ticker">Symbol</label>
+                            <input disabled id="ticker" name="ticker" value="AAPL" type="text" class="validate disabled">
+                        </div>
+                        <div class="col s6">
+                            <label class="center_label" for="purchase_price">Purchase Price</label>
+                            <input disabled id="purchase_price" name="purchase_price"
+                                value=" {{ stock_aapl[0][yesterday]['4. close']|float|round(2, 'floor')  }}" type="text"
+                                class="validate disabled">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">
+                            <label class="center_label" for="stock_amount">Amount</label>
+                            <input placeholder="Insert the number of stock you pretend to buy" id="stock_amount" name="stock_amount" type="text" class="validate" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">
+                            <label class="center_label" for="money_amount">Necessary Funds</label>
+                            <input disabled id="money_amount" name="money_amount" type="text" class="disabled">
+                        </div>
+                    </div>
+                    <div class="center-align">
+                        <button class="waves-effect waves-light btn-large custom-btn green" type="submit"><i
+                                class="fas fa-shopping-cart right"></i>Finalize Purchase</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 {% endblock %}
-
-

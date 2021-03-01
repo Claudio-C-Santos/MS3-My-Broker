@@ -89,10 +89,7 @@ body {
     text-decoration: none;
 }
 
-.buy {
-    margin-left: 500px;
-    margin-left: 500px;
-}
+
 
 @media screen and (min-width: 425px) and (max-width: 1025px){
 
@@ -100,6 +97,7 @@ body {
     margin-left: 50px;
     margin-right: 50px;
 }
+
 
 }
 
@@ -109,5 +107,6 @@ body {
     margin-left: 5px;
     margin-right: 5px;
 }
+
 
 }

@@ -7,7 +7,7 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from alpha_vantage.timeseries import TimeSeries
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 if os.path.exists("env.py"):
     import env
 
@@ -20,8 +20,8 @@ app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("Flask_Secret_Key")
 
-# FUNDS AVAILABLE
-# funds_available = 100
+funds_available = 10000
+funds = format(funds_available, ",")
 
 mongo = PyMongo(app)
 
@@ -64,7 +64,19 @@ def register():
 @app.route("/login", methods={"GET", "POST"})
 def login():
     # Retrieve all data from mongoDB's "transactions" entries
-    TRANSACTIONS = mongo.db.transactions.find()
+    transactions = mongo.db.transactions.find()
+
+    # Retrieve stock info from Alpha Advantage API
+    stock_aapl = app_alpha.get_daily_adjusted("AAPL")
+
+    dayValidator = datetime.now().strftime('%w')
+
+    if dayValidator == '0':
+        yesterday = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
+    elif dayValidator == '1':
+        yesterday = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
+    else:
+        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
 
     if request.method == "POST":
         # check if username is in database
@@ -85,8 +97,10 @@ def login():
                         "profile.html",
                         username=session["user"],
                         first_name=first_name,
-                        transactions=TRANSACTIONS)
-
+                        transactions=transactions,
+                        stock_aapl=stock_aapl,
+                        yesterday=yesterday,
+                        funds_available=funds)
             else:
                 # if the password doesn't match
                 flash("Incorrect Username and/or Password")
@@ -102,7 +116,7 @@ def login():
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
     # Retrieve all data from mongoDB's "transactions" entries
-    TRANSACTIONS = mongo.db.transactions.find()
+    transactions = mongo.db.transactions.find()
 
     # use the sessions's data from db
     username = mongo.db.users.find_one(
@@ -111,11 +125,46 @@ def profile(username):
     first_name = mongo.db.users.find_one(
         {"username": session["user"]})["first_name"]
 
+    # Retrieve stock info from Alpha Advantage API
+    stock_aapl = app_alpha.get_daily_adjusted("AAPL")
+
+    # Last quote available (dayValidator + if statement)
+    # Alpha Advantage only has the last working day's quotes so,
+    # the if statement adjusts the last working day selected
+    # for Sunday and Monday
+    dayValidator = datetime.now().strftime('%w')
+
+    if dayValidator == '0':
+        yesterday = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
+    elif dayValidator == '1':
+        yesterday = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
+    else:
+        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+
+    # Object where each transaction is appended to from the for loop
+    transaction_lst = []
+
+    for transaction in transactions:
+        transaction_lst.append(transaction)
+
+    profit_loss_lst = []
+
+    for item in transaction_lst:
+        profit_loss_lst.append(
+            round(
+                float(item['money_amount']) -
+                float(stock_aapl[0][yesterday]['4. close']), 2))
+
     if session["user"]:
         return render_template(
             "profile.html", username=username,
             first_name=first_name,
-            transactions=TRANSACTIONS)
+            transactions=transactions,
+            transaction_lst=transaction_lst,
+            stock_aapl=stock_aapl,
+            yesterday=yesterday,
+            funds_available=funds,
+            profit_loss_lst=profit_loss_lst)
 
     return render_template("login")
 
@@ -127,30 +176,23 @@ def stocks():
         {"username": session["user"]})["username"]
 
     # Retrieve stock info from Alpha Advantage API
-    stock_ibm = app_alpha.get_daily_adjusted("AAPL")
+    stock_aapl = app_alpha.get_daily_adjusted("AAPL")
 
-    yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+    # Last quote available (dayValidator + if statement)
+    dayValidator = datetime.now().strftime('%w')
+
+    if dayValidator == '0':
+        yesterday = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
+    elif dayValidator == '1':
+        yesterday = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
+    else:
+        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
 
     return render_template("stocks.html",
                             username=username,
-                            stock_ibm=stock_ibm, yesterday=yesterday)
-
-
-@app.route("/buy_stocks")
-def buy_stocks():
-    # use the sessions's data from db
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
-
-    # Retrieve stock info from Alpha Advantage API  
-    stock_ibm = app_alpha.get_daily_adjusted("AAPL")
-
-    yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
-
-    return render_template("buy_stocks.html",
-                            username=username,
-                            stock_ibm=stock_ibm,
-                            yesterday=yesterday)
+                            stock_aapl=stock_aapl,
+                            yesterday=yesterday,
+                            funds_available=funds)
 
 
 @app.route("/logout")
@@ -159,26 +201,6 @@ def logout():
     flash("You have been logged out")
     session.pop("user")
     return redirect(url_for("login"))
-
-
-'''
-@app.route("/get_transactions")
-def get_transactions():
-    transactions = mongo.db.transactions.find()
-    stock = app_alpha.get_daily_adjusted("IBM")
-    return render_template(
-                            "profile.html",
-                            transactions=TRANSACTIONS, stock=STOCK)
-
-
-# FUNDS AVAILABLE
-
-@app.route("profile/<funds_available>")
-def funds_available(funds_available):
-    funds_available = funds_available
-
-    return render_template("profile.html", funds_available=funds_available)
-'''
 
 
 if __name__ ==   "__main__":
