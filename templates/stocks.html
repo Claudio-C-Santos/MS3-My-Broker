@@ -39,29 +39,33 @@
     <div id="modal1" class="modal">
         <div class="modal-content">
             <div class="col s12">
-                <form class="col s12" method="POST" action="">
+                <h4 id="purchase">Purchase Stocks</h4>
+            </div>
+            <div class="divider"></div>
+            <div class="col s12 margin-top">
+                <form class="col s12" method="POST" action="{{ url_for('purchase') }}">
                     <div class="row">
                         <div class="col s6">
                             <label class="center_label" for="ticker">Symbol</label>
-                            <input disabled id="ticker" name="ticker" value="AAPL" type="text" class="validate disabled">
+                            <input readonly id="ticker" name="ticker" value="AAPL" type="text" class="validate disabled">
                         </div>
                         <div class="col s6">
                             <label class="center_label" for="purchase_price">Purchase Price</label>
-                            <input disabled id="purchase_price" name="purchase_price"
-                                value=" {{ stock_aapl[0][yesterday]['4. close']|float|round(2, 'floor')  }}" type="text"
+                            <input readonly id="purchase_price" name="purchase_price"
+                                value="{{ stock_aapl[0][yesterday]['4. close']|float|round(2, 'floor')  }}" type="number"
                                 class="validate disabled">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col s6">
+                    <div class="container">
+                        <div class="col s1 offset-s2">
                             <label class="center_label" for="stock_amount">Amount</label>
-                            <input placeholder="Insert the number of stock you pretend to buy" id="stock_amount" name="stock_amount" type="text" class="validate" required>
+                            <input placeholder="Insert stock amount" id="stock_amount" name="stock_amount" type="number" class="validate" required>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col s6">
+                    <div class="container">
+                        <div class="col s1 offset-s2">
                             <label class="center_label" for="money_amount">Necessary Funds</label>
-                            <input disabled id="money_amount" name="money_amount" type="text" class="disabled">
+                            <input readonly id="money_amount" name="money_amount" type="number" class="disabled">
                         </div>
                     </div>
                     <div class="center-align">

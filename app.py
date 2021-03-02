@@ -169,9 +169,7 @@ def profile(username):
 
     for item in transaction_lst:
         profit_loss_lst.append(
-            round(
-                float(item['money_amount']) -
-                float(stock_aapl[0][yesterday]['4. close']), 2))
+            round(((float(item['purchase_price']) - float(stock_aapl[0][yesterday]['4. close'])) * int(item['stock_amount'])), 2))
 
     if session["user"]:
         return render_template(
@@ -211,6 +209,35 @@ def stocks():
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
                             funds_available=funds)
+
+
+@app.route('/purchase', methods=["GET", "POST"])
+def purchase():
+
+    # Retrieve stock info from Alpha Advantage API
+    stock_aapl = app_alpha.get_daily_adjusted("AAPL")
+
+    # Last quote available (dayValidator + if statement)
+    dayValidator = datetime.now().strftime('%w')
+
+    if dayValidator == '0':
+        yesterday = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
+    elif dayValidator == '1':
+        yesterday = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
+    else:
+        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+
+    if request.method == "POST":
+        purchase = {
+            "purchase_date": yesterday,
+            "ticker": request.form.get('ticker'),
+            "stock_amount": request.form.get("stock_amount"),
+            "purchase_price": request.form.get("purchase_price"),
+            "money_amount": request.form.get("money_amount"),
+            "purchase_by": session["user"]
+        }
+        mongo.db.transactions.insert_one(purchase)
+        return redirect(url_for("stocks"))
 
 
 @app.route("/logout")

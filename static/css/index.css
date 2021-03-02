@@ -38,6 +38,7 @@ body {
 }
 
 .btn-large {
+    margin: 20px;
     background-color: blue;
     margin-bottom: 20px;
 }
@@ -89,7 +90,9 @@ body {
     text-decoration: none;
 }
 
-
+.margin-top {
+    margin-top: 20px;
+}
 
 @media screen and (min-width: 425px) and (max-width: 1025px){
 

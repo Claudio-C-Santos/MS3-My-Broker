@@ -3,7 +3,7 @@
     [] The user can only see positions open by him
 
 [] Stocks Page
-    [] Buy stocks
+    [] ticker, purchase_price and money_amount are not being inserted into MongoDB
 
 [] Optional: Add a viewing mode that user can see dashboard without logging in, some features will be limited. (idea: only display analysis feature)
 

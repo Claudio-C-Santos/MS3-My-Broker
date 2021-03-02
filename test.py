@@ -38,16 +38,4 @@ else:
 
 transactions = mongo.db.transactions.find()
 
-transaction_lst = []
-
-for transaction in transactions:
-    transaction_lst.append(transaction)
-
-profit_loss = []
-
-for item in transaction_lst:
-    print(float(item['money_amount']))
-    print(float(stock_aapl[0][yesterday]['1. open']))
-    profit_loss.append(float(item['money_amount']) - float(stock_aapl[0][yesterday]['4. close']))
-
-print(profit_loss)
+print(stock_aapl)
