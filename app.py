@@ -80,6 +80,20 @@ def login():
     else:
         yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
 
+    # Object where each transaction is appended to from the for loop
+    transaction_lst = []
+
+    for items in transactions:
+        transaction_lst.append(items)
+
+    profit_loss_lst = []
+
+    for item in transaction_lst:
+        profit_loss_lst.append(
+            round(
+                float(item['money_amount']) -
+                float(stock_aapl[0][yesterday]['4. close']), 2))
+
     if request.method == "POST":
         # check if username is in database
         existing_user = mongo.db.users.find_one(
@@ -100,9 +114,11 @@ def login():
                         username=session["user"],
                         first_name=first_name,
                         transactions=transactions,
+                        transaction_lst=transaction_lst,
                         stock_aapl=stock_aapl,
                         yesterday=yesterday,
-                        funds_available=funds)
+                        funds_available=funds,
+                        profit_loss_lst=profit_loss_lst)
             else:
                 # if the password doesn't match
                 flash("Incorrect Username and/or Password")

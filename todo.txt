@@ -1,20 +1,9 @@
-[] Profile
-    [] Display funds available
-        NOTE: Tried to create a variable inside the decorator and pass it when rendering the template but it didn't work
-    [] Display total profit/loss
-    [] Display Funds Use
-        [] How to make calculation using the jinja templates
-    [] Display profit/loss per position open
+[] Profile Page
+    [] Create Sell button on each open position
+    [] The user can only see positions open by him
 
 [] Stocks Page
-
-[] Cryptocurrencies page
-
-[] Open Positions
+    [] Buy stocks
 
 [] Optional: Add a viewing mode that user can see dashboard without logging in, some features will be limited. (idea: only display analysis feature)
 
-
-
-- Urgent Questions
-[] How to use variable funds_available??
