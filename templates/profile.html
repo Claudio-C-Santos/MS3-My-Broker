@@ -12,7 +12,9 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-m font-weight-bold text-info text-uppercase mb-1">Available Funds</div>
-                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ funds_available }}&euro;</div>
+                            <div class="h3 mb-0 font-weight-bold text-gray-800">
+                                {{ funds_available }}    
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-wallet fa-2x text-gray-300"></i>
@@ -30,7 +32,7 @@
                         <div class="col mr-2">
                             <div class="text-m font-weight-bold text-info text-uppercase mb-1">Profit/Loss</div>
                             <div class="h3 mb-0 font-weight-bold text-gray-800">
-                                {{ profit_loss_lst|sum|round(2, 'floor') }}
+                                {{ profit_loss_lst|sum }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -88,7 +90,7 @@
                 {{ transaction.stock_amount|float * transaction.purchase_price|float }}
             </div>
             <div class="col s2">
-                {{ (transaction.purchase_price|float - stock_aapl[0][yesterday]['4. close']|float)|float|round(3, 'floor') }}
+                {{ ((transaction.purchase_price|float - stock_aapl[0][yesterday]['4. close']|float) * transaction.stock_amount|int)|float|round(3, 'floor') }}
             </div>     
         </div>
     {% endfor %}

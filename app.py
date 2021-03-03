@@ -14,18 +14,58 @@ if os.path.exists("env.py"):
 # instancing Flask
 app = Flask(__name__)
 
+
 # instancing Alpha Advantage API in order to retrieve quotes
 app_alpha = TimeSeries("Alpha_Advantage_key")
+# Retrieve stock info from Alpha Advantage API
+stock_aapl = app_alpha.get_daily_adjusted("AAPL")
 
 # instancing access to MongoDB database
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("Flask_Secret_Key")
 
-funds_available = 10000
+mongo = PyMongo(app)
+
+# Retrieve all data from mongoDB's "transactions" entries
+transactions = mongo.db.transactions.find()
+
+
+# Retrieve all data from mongoDB's "wallet_transactions" entries
+wallet_transactions = mongo.db.wallet_transactions.find()
+
+wallet_statements = []
+
+for statements in wallet_transactions:
+    wallet_statements.append(statements['money_amount'])
+
+initial_funds = 10000
+funds_available = initial_funds + sum(wallet_statements)
 funds = format(funds_available, ",")
 
-mongo = PyMongo(app)
+
+# Yesterday Selector
+dayValidator = datetime.now().strftime('%w')
+
+if dayValidator == '0':
+    yesterday = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
+elif dayValidator == '1':
+    yesterday = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
+else:
+    yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+
+
+# Object where each transaction is appended to from the for loop
+transaction_lst = []
+
+for items in transactions:
+    transaction_lst.append(items)
+
+profit_loss_lst = []
+
+for item in transaction_lst:
+    profit_loss_lst.append(
+        round(((float(item['purchase_price']) - float(stock_aapl[0][yesterday]['4. close'])) * int(item['stock_amount'])), 2))
 
 
 @app.route("/")
@@ -59,41 +99,12 @@ def register():
             "profile.html",
             username=session["user"],
             first_name=first_name,
-            transactions=TRANSACTIONS)
+            transactions=transactions)
     return render_template("register.html")
 
 
 @app.route("/login", methods={"GET", "POST"})
 def login():
-    # Retrieve all data from mongoDB's "transactions" entries
-    transactions = mongo.db.transactions.find()
-
-    # Retrieve stock info from Alpha Advantage API
-    stock_aapl = app_alpha.get_daily_adjusted("AAPL")
-
-    dayValidator = datetime.now().strftime('%w')
-
-    if dayValidator == '0':
-        yesterday = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
-    elif dayValidator == '1':
-        yesterday = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
-    else:
-        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
-
-    # Object where each transaction is appended to from the for loop
-    transaction_lst = []
-
-    for items in transactions:
-        transaction_lst.append(items)
-
-    profit_loss_lst = []
-
-    for item in transaction_lst:
-        profit_loss_lst.append(
-            round(
-                float(item['money_amount']) -
-                float(stock_aapl[0][yesterday]['4. close']), 2))
-
     if request.method == "POST":
         # check if username is in database
         existing_user = mongo.db.users.find_one(
@@ -133,43 +144,12 @@ def login():
 
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
-    # Retrieve all data from mongoDB's "transactions" entries
-    transactions = mongo.db.transactions.find()
-
     # use the sessions's data from db
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
 
     first_name = mongo.db.users.find_one(
         {"username": session["user"]})["first_name"]
-
-    # Retrieve stock info from Alpha Advantage API
-    stock_aapl = app_alpha.get_daily_adjusted("AAPL")
-
-    # Last quote available (dayValidator + if statement)
-    # Alpha Advantage only has the last working day's quotes so,
-    # the if statement adjusts the last working day selected
-    # for Sunday and Monday
-    dayValidator = datetime.now().strftime('%w')
-
-    if dayValidator == '0':
-        yesterday = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
-    elif dayValidator == '1':
-        yesterday = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
-    else:
-        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
-
-    # Object where each transaction is appended to from the for loop
-    transaction_lst = []
-
-    for transaction in transactions:
-        transaction_lst.append(transaction)
-
-    profit_loss_lst = []
-
-    for item in transaction_lst:
-        profit_loss_lst.append(
-            round(((float(item['purchase_price']) - float(stock_aapl[0][yesterday]['4. close'])) * int(item['stock_amount'])), 2))
 
     if session["user"]:
         return render_template(
@@ -179,8 +159,9 @@ def profile(username):
             transaction_lst=transaction_lst,
             stock_aapl=stock_aapl,
             yesterday=yesterday,
-            funds_available=funds,
-            profit_loss_lst=profit_loss_lst)
+            funds_available=funds_available,
+            profit_loss_lst=profit_loss_lst,
+            wallet_statements=wallet_statements)
 
     return render_template("login")
 
@@ -191,42 +172,16 @@ def stocks():
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
 
-    # Retrieve stock info from Alpha Advantage API
-    stock_aapl = app_alpha.get_daily_adjusted("AAPL")
-
-    # Last quote available (dayValidator + if statement)
-    dayValidator = datetime.now().strftime('%w')
-
-    if dayValidator == '0':
-        yesterday = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
-    elif dayValidator == '1':
-        yesterday = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
-    else:
-        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
-
     return render_template("stocks.html",
                             username=username,
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
-                            funds_available=funds)
+                            funds_available=funds_available,
+                            profit_loss_lst=profit_loss_lst)
 
 
 @app.route('/purchase', methods=["GET", "POST"])
 def purchase():
-
-    # Retrieve stock info from Alpha Advantage API
-    stock_aapl = app_alpha.get_daily_adjusted("AAPL")
-
-    # Last quote available (dayValidator + if statement)
-    dayValidator = datetime.now().strftime('%w')
-
-    if dayValidator == '0':
-        yesterday = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
-    elif dayValidator == '1':
-        yesterday = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
-    else:
-        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
-
     if request.method == "POST":
         purchase = {
             "purchase_date": yesterday,
@@ -237,6 +192,10 @@ def purchase():
             "purchase_by": session["user"]
         }
         mongo.db.transactions.insert_one(purchase)
+        wallet_transaction = {
+            "money_amount": -float(request.form.get("money_amount"))
+        }
+        mongo.db.wallet_transactions.insert_one(wallet_transaction)
         return redirect(url_for("stocks"))
 
 

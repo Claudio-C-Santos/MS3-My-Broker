@@ -38,4 +38,18 @@ else:
 
 transactions = mongo.db.transactions.find()
 
-print(stock_aapl)
+transaction_lst = []
+
+for transaction in transactions:
+    transaction_lst.append(transaction)
+
+profit_loss_lst = []
+
+for item in transaction_lst:
+    profit_loss_lst.append(
+        round(((float(item['purchase_price']) -
+        float(stock_aapl[0][yesterday]['4. close'])) *
+        int(item['stock_amount'])), 2))
+
+
+print(sum(profit_loss_lst))
