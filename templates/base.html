@@ -25,7 +25,7 @@
                 </div>
                 <div class="sidebar-brand-text mx-3">{{ username }}</div>
             </a>
-    
+
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
     
@@ -35,6 +35,28 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+    
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Personal
+            </div>
+    
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ url_for('openPositions') }}">
+                    <i class="fas fa-hand-holding"></i>
+                    <span>Open Positions</span>
+                </a>
+            </li>  
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span>Closed Positions</span>
+                </a>
+            </li>           
     
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -46,30 +68,12 @@
     
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ url_for('stocks') }}" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
+                <a class="nav-link collapsed" href="{{ url_for('stocks') }}">
                     <i class="fas fa-chart-line"></i>
                     <span>Stocks</span>
                 </a>
             </li>
-    
-            <!-- Currencies Link -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ url_for('stocks') }}" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-coins"></i>
-                    <span>Currencies</span>
-                </a>
-            </li>
 
-            <!-- Cryptocurrencies Link -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-coins"></i>
-                    <span>Cryptocurrencies</span>
-                </a>
-            </li>
         </ul>
         <!-- End of Sidebar -->
     

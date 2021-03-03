@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h3 class="left-align">Open Positions</h3>
+
+    <div class="row positions_title py-2">
+        <div class="col s2 "><b>Symbol</b></div>
+        <div class="col s2"><b>Purchase Date</b></div>
+        <div class="col s2"><b>Unit Price</b></div>
+        <div class="col s2"><b>Amount of Stocks</b></div>
+        <div class="col s2"><b>Funds Used</b></div>
+        <div class="col s2"><b>Profit/Loss</b></div>
+        <div class="col s2"></div>
+        <div class="col s2"></div>
+    </div>
+
+    {% for transaction in transaction_lst %}
+    <div class="row shadow py-2">
+        <div class="col s2 stock-quotes">
+            {{ transaction.ticker }}
+        </div>
+        <div class="col s2 stock-quotes">
+            {{ transaction.purchase_date }}
+        </div>
+        <div class="col s2 stock-quotes">
+            {{ transaction.purchase_price }}
+        </div>
+        <div class="col s2 stock-quotes">
+            {{ transaction.stock_amount }}
+        </div>
+        <div class="col s2 stock-quotes">
+            {{ transaction.stock_amount|float * transaction.purchase_price|float }}
+        </div>
+        <div class="col s2 stock-quotes">
+            {{ ((transaction.purchase_price|float - stock_aapl[0][yesterday]['4. close']|float) * transaction.stock_amount|int)|float|round(3, 'floor') }}
+        </div>
+        <div class="col s2 stock-quotes">
+            <a class="waves-effect waves-light btn-small orange modal-trigger buy-stock-btn" href="#partialSell-modal">Partial Sell</a>
+        </div>
+        <div class="col s2 stock-quotes">
+            <a class="waves-effect waves-light btn-small red modal-trigger buy-stock-btn" href="#sell-modal">Sell</a>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Modal Structure -->
+    <div id="partialSell-modal" class="modal">
+        <div class="modal-content">
+            <div class="col s12">
+                <h4 id="purchase">Partial Stocks Sell</h4>
+            </div>
+            <div class="divider"></div>
+            <div class="col s12 margin-top">
+                <form class="col s12" method="POST" action="{{ url_for('purchase') }}">
+                    <div class="row">
+                        <div class="col s6">
+                            <label class="center_label" for="ticker">Symbol</label>
+                            <input readonly id="ticker" name="ticker" value="AAPL" type="text" class="validate disabled">
+                        </div>
+                        <div class="col s6">
+                            <label class="center_label" for="purchase_price">Purchase Price</label>
+                            <input readonly id="purchase_price" name="purchase_price"
+                                value="{{ stock_aapl[0][yesterday]['4. close']|float|round(2, 'floor')  }}" type="number"
+                                class="validate disabled">
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="col s1 offset-s2">
+                            <label class="center_label" for="stock_amount">Amount</label>
+                            <input placeholder="Insert stock amount" id="stock_amount" name="stock_amount" type="number" class="validate" required>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="col s1 offset-s2">
+                            <label class="center_label" for="money_amount">Necessary Funds</label>
+                            <input readonly id="money_amount" name="money_amount" type="number" class="disabled">
+                        </div>
+                    </div>
+                    <div class="center-align">
+                        <button class="waves-effect waves-light btn-large custom-btn green" type="submit"><i
+                                class="fas fa-shopping-cart right"></i>Finalize</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

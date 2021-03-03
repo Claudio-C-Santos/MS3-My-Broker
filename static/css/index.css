@@ -85,7 +85,7 @@ body {
     line-height: 32px;
 }
 
-#buy-stock-btn:hover {
+.buy-stock-btn:hover {
     color:white; 
     text-decoration: none;
 }
