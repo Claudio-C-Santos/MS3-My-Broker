@@ -43,9 +43,18 @@ body {
     margin-bottom: 20px;
 }
 
-.custom-btn:hover {
+.custom-btn {
+    width: 75%;
+    height: 75%;
+}
+
+.hover-btn:hover {
     text-decoration: none;
     color: white;
+}
+
+.sell-btn {
+    height: 100px;
 }
 
 #flash-messages {
@@ -92,6 +101,10 @@ body {
 
 .margin-top {
     margin-top: 20px;
+}
+
+.modal-title {
+    margin: 25px;
 }
 
 @media screen and (min-width: 425px) and (max-width: 1025px){

@@ -7,3 +7,5 @@
 
 [] Optional: Add a viewing mode that user can see dashboard without logging in, some features will be limited. (idea: only display analysis feature)
 
+[] Include floating button
+

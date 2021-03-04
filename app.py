@@ -294,9 +294,36 @@ def openPositions():
                             wallet_statements=wallet_statements)
 
 
+@app.route("/sellAll", methods=["GET", "POST"])
+def sellAll():
+    # use the sessions's data from db
+    username = mongo.db.users.find_one(
+        {"username": session["user"]})["username"]
+    
+    return render_template("sell-all-stocks_copy.html",
+                            username=username,
+                            stock_aapl=stock_aapl,
+                            yesterday=yesterday,
+                            funds_available=funds_available,
+                            profit_loss_lst=profit_loss_lst)
+
+
 @app.route("/partial_sell/<position_id>", methods=["GET", "POST"])
 def partialSell(position_id):
-    position = mongo.db.transactions.find_one({"_id": ObjectId(position_id)})
+    open_position = mongo.db.transactions.find_one(
+        {"_id": ObjectId(position_id)})
+
+    # use the sessions's data from db
+    username = mongo.db.users.find_one(
+        {"username": session["user"]})["username"]
+
+    return render_template("sell-partial-stocks.html",
+                            username=username,
+                            stock_aapl=stock_aapl,
+                            yesterday=yesterday,
+                            funds_available=funds_available,
+                            profit_loss_lst=profit_loss_lst,
+                            open_position=open_position)
 
 
 @app.route("/logout")
