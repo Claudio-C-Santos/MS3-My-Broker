@@ -155,7 +155,7 @@ def profile(username):
 
     for item in transaction_lst:
         profit_loss_lst.append(
-            round(((float(item['purchase_price']) - float(stock_aapl[0][yesterday]['4. close'])) * int(item['stock_amount'])), 2))
+            round(((float(stock_aapl[0][yesterday]['4. close']) - float(item['purchase_price'])) * int(item['stock_amount'])), 2))
 
     # use the sessions's data from db
     username = mongo.db.users.find_one(
@@ -281,7 +281,7 @@ def openPositions():
 
     for item in transaction_lst:
         profit_loss_lst.append(
-            round(((float(item['purchase_price']) - float(stock_aapl[0][yesterday]['4. close'])) * int(item['stock_amount'])), 2))
+            round(((float(stock_aapl[0][yesterday]['4. close']) - float(item['purchase_price'])) * int(item['stock_amount'])), 2))
 
     return render_template("open-positions.html",
                             username=username,

@@ -90,7 +90,7 @@
                 {{ (transaction.stock_amount|float * transaction.purchase_price|float)|round(2, 'floor') }}
             </div>
             <div class="col s2 stock-quotes">
-                {{ ((transaction.purchase_price|float - stock_aapl[0][yesterday]['4. close']|float) * transaction.stock_amount|int)|float|round(3, 'floor') }}
+                {{ ((stock_aapl[0][yesterday]['4. close']|float - transaction.purchase_price|float) * transaction.stock_amount|int)|float|round(2, 'floor') }}
             </div>
         </div>
     {% endfor %}
