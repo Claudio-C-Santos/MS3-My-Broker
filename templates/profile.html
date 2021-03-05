@@ -32,7 +32,7 @@
                         <div class="col mr-2">
                             <div class="text-m font-weight-bold text-info text-uppercase mb-1">Profit/Loss</div>
                             <div class="h3 mb-0 font-weight-bold text-gray-800">
-                                {{ profit_loss_lst|sum }}
+                                {{ profit_loss_lst|sum|round(2, 'floor') }}
                             </div>
                         </div>
                         <div class="col-auto">

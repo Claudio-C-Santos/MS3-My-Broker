@@ -52,6 +52,7 @@ profit_loss_lst = []
 for item in transaction_lst:
     profit_loss_lst.append(
         round(((float(item['purchase_price']) - float(stock_aapl[0][yesterday]['4. close'])) * int(item['stock_amount'])), 2))
+        # round(((float(item['purchase_price']) - float(stock_aapl[0][yesterday]['4. close'])) * int(item['stock_amount'])), 2))
 
 # Retrieve all data from mongoDB's "wallet_transactions" entries
 wallet_transactions = mongo.db.wallet_transactions.find()
@@ -308,8 +309,44 @@ def sellAll():
                             profit_loss_lst=profit_loss_lst)
 
 
-@app.route("/partial_sell/<position_id>", methods=["GET", "POST"])
-def partialSell(position_id):
+@app.route("/sell/<position_id>", methods=["GET", "POST"])
+def sell(position_id):
+    if request.method == "POST":
+        if request.form.get(
+            "stock_amount_sell") < request.form.get(
+                "stocks_owned"):
+
+            remaining_stock = int(
+                request.form.get("stocks_owned")) - int(
+                    request.form.get("stock_amount_sell"))
+            update = {
+                "purchase_date": yesterday,
+                "ticker": request.form.get('ticker'),
+                "stock_amount": str(remaining_stock),
+                "purchase_price": request.form.get("purchase_price_sell"),
+                "money_amount": request.form.get("money_amount_sell"),
+                "purchase_by": session["user"]
+            }
+            mongo.db.transactions.update(
+                {"_id": ObjectId(position_id)}, update)
+
+            # Update funds available
+            wallet_transaction = {
+                "money_amount": -float(request.form.get("money_amount_sell"))
+            }
+
+            mongo.db.wallet_transactions.insert_one(wallet_transaction)
+
+        elif request.form.get(
+            "stock_amount_sell") == request.form.get(
+                "stocks_owned"):
+            print("Sell all")
+
+        elif request.form.get(
+            "stock_amount_sell") > request.form.get(
+                "stocks_owned"):
+            print("Don't own that many stocks")
+
     open_position = mongo.db.transactions.find_one(
         {"_id": ObjectId(position_id)})
 
@@ -317,7 +354,7 @@ def partialSell(position_id):
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
 
-    return render_template("sell-partial-stocks.html",
+    return render_template("sell-stocks.html",
                             username=username,
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,

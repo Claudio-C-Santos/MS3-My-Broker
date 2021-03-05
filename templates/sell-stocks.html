@@ -8,23 +8,29 @@
                 </div>
                 <div class="divider"></div>
                 <div class="col s12 margin-top">
-                    <form class="col s12" method="POST" action="{{ url_for('purchase') }}">
+                    <form class="col s12" method="POST" action="{{ url_for('sell', position_id=open_position._id ) }}">
                         <div class="row">
                             <div class="col s6">
                                 <label class="center_label" for="ticker">Symbol</label>
                                 <input readonly id="ticker" name="ticker" value="AAPL" type="text"
                                     class="validate disabled">
                             </div>
+                            <div class="col s6">
+                                <label class="center_label" for="stocks_owned">Stocks Owned</label>
+                                <input readonly id="stocks_owned" name="stocks_owned"
+                                    value="{{ open_position.stock_amount}}"
+                                    type="number" class="validate disabled">
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col s6">
-                                <label class="center_label" for="purchase_price">Purchase Price</label>
-                                <input readonly id="purchase_price" name="purchase_price"
-                                    value="{{ stock_aapl[0][yesterday]['4. close']|float|round(2, 'floor')  }}"
+                                <label class="center_label" for="purchase_price_sell">Purchase Price</label>
+                                <input readonly id="purchase_price_sell" name="purchase_price_sell"
+                                    value="{{ open_position.purchase_price}}"
                                     type="number" class="validate disabled">
                             </div>
                             <div class="col s6">
-                                <label class="center_label" for="purchase_price">Selling Price</label>
+                                <label class="center_label" for="selling_price">Selling Price</label>
                                 <input readonly id="selling_price" name="selling_price"
                                     value="{{ stock_aapl[0][yesterday]['4. close']|float|round(2, 'floor')  }}"
                                     type="number" class="validate disabled">
@@ -32,15 +38,15 @@
                         </div>
                         <div class="container">
                             <div class="col s1 offset-s2">
-                                <label class="center_label" for="stock_amount">Amount</label>
-                                <input placeholder="Insert stock amount" id="stock_amount" name="stock_amount" type="number"
+                                <label class="center_label" for="stock_amount_sell">Amount</label>
+                                <input placeholder="Insert stock amount" id="stock_amount_sell" name="stock_amount_sell" type="number"
                                     class="validate" required>
                             </div>
                         </div>
                         <div class="container">
                             <div class="col s1 offset-s2">
-                                <label class="center_label" for="money_amount">Necessary Funds</label>
-                                <input readonly id="money_amount" name="money_amount" type="number" class="disabled">
+                                <label class="center_label" for="money_amount_sell">Incoming Funds</label>
+                                <input readonly id="money_amount_sell" name="money_amount_sell" type="number" class="disabled">
                             </div>
                         </div>
                         <div class="center-align">

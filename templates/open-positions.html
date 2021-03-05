@@ -34,10 +34,7 @@
             {{ ((transaction.purchase_price|float - stock_aapl[0][yesterday]['4. close']|float) * transaction.stock_amount|int)|float|round(3, 'floor') }}
         </div>
         <div class="col s1 stock-quotes">
-            <a class="waves-effect waves-light btn-small orange modal-trigger buy-stock-btn" href="{{ url_for('partialSell', position_id=transaction._id) }}">Sell partial amount</a>
-        </div>
-        <div class="col s1 stock-quotes">
-            <a class="waves-effect waves-light btn-small red modal-trigger buy-stock-btn" href="{{ url_for('partialSell', position_id=transaction._id) }}">Sell total amount</a>
+            <a class="waves-effect waves-light btn-small red modal-trigger buy-stock-btn" href="{{ url_for('sell', position_id=transaction._id) }}">Sell</a>
         </div>
     </div>
     {% endfor %}
