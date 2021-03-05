@@ -9,7 +9,6 @@
         <div class="col s2"><b>Amount of Stocks</b></div>
         <div class="col s2"><b>Funds Used</b></div>
         <div class="col s2"><b>Profit/Loss</b></div>
-        <div class="col s2"></div>
         <div class="col s4"></div>
     </div>
 
@@ -28,10 +27,10 @@
             {{ transaction.stock_amount }}
         </div>
         <div class="col s2 stock-quotes">
-            {{ transaction.stock_amount|float * transaction.purchase_price|float }}
+            {{ (transaction.stock_amount|float * transaction.purchase_price|float)|round(2, 'floor') }}
         </div>
         <div class="col s2 stock-quotes">
-            {{ ((transaction.purchase_price|float - stock_aapl[0][yesterday]['4. close']|float) * transaction.stock_amount|int)|float|round(3, 'floor') }}
+            {{ ((transaction.purchase_price|float - stock_aapl[0][yesterday]['4. close']|float) * transaction.stock_amount|int)|float|round(2, 'floor') }}
         </div>
         <div class="col s1 stock-quotes">
             <a class="waves-effect waves-light btn-small red modal-trigger buy-stock-btn" href="{{ url_for('sell', position_id=transaction._id) }}">Sell</a>

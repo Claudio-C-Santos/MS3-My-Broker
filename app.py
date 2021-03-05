@@ -222,6 +222,19 @@ def stocks():
 
 @app.route("/purchase_stocks")
 def purchaseStocks():
+    # Retrieve all data from mongoDB's "wallet_transactions" entries
+    wallet_transactions = mongo.db.wallet_transactions.find()
+
+    wallet_statements = []
+
+    for statements in wallet_transactions:
+        wallet_statements.append(statements['money_amount'])
+
+    # account's funds
+    initial_funds = 10000
+    funds = initial_funds + sum(wallet_statements)
+    funds_available = format(round(funds, 2), ",")
+
     # use the sessions's data from db
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
@@ -236,6 +249,11 @@ def purchaseStocks():
 
 @app.route('/purchase', methods=["GET", "POST"])
 def purchase():
+    # account's funds
+    initial_funds = 10000
+    funds = initial_funds + sum(wallet_statements)
+    funds_available = format(round(funds, 2), ",")
+
     if request.method == "POST":
         if funds >= float(request.form.get("money_amount")):
             purchase = {
@@ -284,6 +302,19 @@ def openPositions():
         profit_loss_lst.append(
             round(((float(stock_aapl[0][yesterday]['4. close']) - float(item['purchase_price'])) * int(item['stock_amount'])), 2))
 
+    # Retrieve all data from mongoDB's "wallet_transactions" entries
+    wallet_transactions = mongo.db.wallet_transactions.find()
+
+    wallet_statements = []
+
+    for statements in wallet_transactions:
+        wallet_statements.append(statements['money_amount'])
+
+    # account's funds
+    initial_funds = 10000
+    funds = initial_funds + sum(wallet_statements)
+    funds_available = format(round(funds, 2), ",")
+
     return render_template("open-positions.html",
                             username=username,
                             transactions=transactions,
@@ -295,22 +326,40 @@ def openPositions():
                             wallet_statements=wallet_statements)
 
 
-@app.route("/sellAll", methods=["GET", "POST"])
-def sellAll():
+@app.route("/sell/<position_id>", methods=["GET", "POST"])
+def sell(position_id):
+    # Retrieve all data from mongoDB's "wallet_transactions" entries
+    wallet_transactions = mongo.db.wallet_transactions.find()
+
+    wallet_statements = []
+
+    for statements in wallet_transactions:
+        wallet_statements.append(statements['money_amount'])
+
+    # account's funds
+    initial_funds = 10000
+    funds = initial_funds + sum(wallet_statements)
+    funds_available = format(round(funds, 2), ",")
+
     # use the sessions's data from db
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
-    
-    return render_template("sell-all-stocks_copy.html",
-                            username=username,
-                            stock_aapl=stock_aapl,
-                            yesterday=yesterday,
-                            funds_available=funds_available,
-                            profit_loss_lst=profit_loss_lst)
 
+    # Retrieve all data from mongoDB's "transactions" entries
+    transactions = mongo.db.transactions.find()
 
-@app.route("/sell/<position_id>", methods=["GET", "POST"])
-def sell(position_id):
+    # Object where each transaction is appended to from the for loop
+    transaction_lst = []
+
+    for items in transactions:
+        transaction_lst.append(items)
+
+    profit_loss_lst = []
+
+    for item in transaction_lst:
+        profit_loss_lst.append(
+            round(((float(stock_aapl[0][yesterday]['4. close']) - float(item['purchase_price'])) * int(item['stock_amount'])), 2))
+
     if request.method == "POST":
         if request.form.get(
             "stock_amount_sell") < request.form.get(
@@ -319,6 +368,7 @@ def sell(position_id):
             remaining_stock = int(
                 request.form.get("stocks_owned")) - int(
                     request.form.get("stock_amount_sell"))
+
             update = {
                 "purchase_date": yesterday,
                 "ticker": request.form.get('ticker'),
@@ -327,15 +377,18 @@ def sell(position_id):
                 "money_amount": request.form.get("money_amount_sell"),
                 "purchase_by": session["user"]
             }
+
             mongo.db.transactions.update(
                 {"_id": ObjectId(position_id)}, update)
 
             # Update funds available
             wallet_transaction = {
-                "money_amount": -float(request.form.get("money_amount_sell"))
+                "money_amount": float(request.form.get("money_amount_sell"))
             }
 
             mongo.db.wallet_transactions.insert_one(wallet_transaction)
+
+            return redirect(url_for('openPositions'))
 
         elif request.form.get(
             "stock_amount_sell") == request.form.get(
