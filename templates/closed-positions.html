@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h3 class="left-align">Closed Positions</h3>
+
+    <div class="row positions_title py-2">
+        <div class="col s2 "><b>Symbol</b></div>
+        <div class="col s2"><b>Selling Date</b></div>
+        <div class="col s2"><b>Stocks Sold</b></div>
+        <div class="col s2"><b>Purchase Price</b></div>
+        <div class="col s2"><b>Selling Price</b></div>
+        <div class="col s2"><b>Profit/Loss</b></div>
+    </div>
+
+    {% for transaction in closed_positions %}
+    <div class="row shadow py-2">
+        <div class="col s2 stock-quotes">
+            {{ transaction.ticker }}
+        </div>
+        <div class="col s2 stock-quotes">
+            {{ transaction.selling_date }}
+        </div>
+        <div class="col s2 stock-quotes">
+            {{ transaction.stock_amount }}
+        </div>
+        <div class="col s2 stock-quotes">
+            {{ transaction.purchase_price }}
+        </div>
+        <div class="col s2 stock-quotes">
+            {{ transaction.selling_price }}
+        </div>
+        <div class="col s2 stock-quotes">
+            {{ transaction.money_amount|float|round(2, 'floor') }}
+        </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}

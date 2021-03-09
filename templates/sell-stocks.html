@@ -49,6 +49,24 @@
                                 <input readonly id="money_amount_sell" name="money_amount_sell" type="number" class="disabled">
                             </div>
                         </div>
+
+                        <section>
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                    {% for message in messages %} 
+                                            <div class="row">
+                                                <div class="center">
+                                                    <div class="card-panel red accent-4">
+                                                        <i class="fas fa-exclamation-triangle"></i><span class="white-text center-align"> {{ message }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                        </section>
+
+
                         <div class="center-align">
                             <button class="waves-effect waves-light btn-large custom-btn green" type="submit"><i
                                     class="fas fa-shopping-cart right"></i>Finalize</button>

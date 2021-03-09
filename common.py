@@ -11,10 +11,6 @@ from datetime import date, datetime, timedelta
 if os.path.exists("env.py"):
     import env
 
-app = Flask(__name__)
-
-mongo = PyMongo(app)
-
 
 def getUsername(session):
     # use the sessions's data from db
