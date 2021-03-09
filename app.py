@@ -10,6 +10,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date, datetime, timedelta
 if os.path.exists("env.py"):
     import env
+from common import getUsername
+
 
 # instancing Flask
 app = Flask(__name__)
@@ -143,6 +145,8 @@ def login():
 
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
+
+    print(getUsername(session))
     # Retrieve all data from mongoDB's "transactions" entries
     transactions = mongo.db.transactions.find()
 
@@ -157,10 +161,6 @@ def profile(username):
     for item in transaction_lst:
         profit_loss_lst.append(
             round(((float(stock_aapl[0][yesterday]['4. close']) - float(item['purchase_price'])) * int(item['stock_amount'])), 2))
-
-    # use the sessions's data from db
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
 
     first_name = mongo.db.users.find_one(
         {"username": session["user"]})["first_name"]
@@ -213,7 +213,7 @@ def stocks():
         {"username": session["user"]})["username"]
 
     return render_template("stocks.html",
-                            username=username,
+                            getUsername=username,
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
                             funds_available=funds_available,
@@ -240,7 +240,7 @@ def purchaseStocks():
         {"username": session["user"]})["username"]
 
     return render_template("purchase-stocks.html",
-                            username=username,
+                            getUsername=username,
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
                             funds_available=funds_available,
@@ -249,6 +249,14 @@ def purchaseStocks():
 
 @app.route('/purchase', methods=["GET", "POST"])
 def purchase():
+    # Retrieve all data from mongoDB's "wallet_transactions" entries
+    wallet_transactions = mongo.db.wallet_transactions.find()
+
+    wallet_statements = []
+
+    for statements in wallet_transactions:
+        wallet_statements.append(statements['money_amount'])
+
     # account's funds
     initial_funds = 10000
     funds = initial_funds + sum(wallet_statements)
@@ -316,7 +324,7 @@ def openPositions():
     funds_available = format(round(funds, 2), ",")
 
     return render_template("open-positions.html",
-                            username=username,
+                            getUsername=username,
                             transactions=transactions,
                             transaction_lst=transaction_lst,
                             stock_aapl=stock_aapl,
@@ -388,12 +396,42 @@ def sell(position_id):
 
             mongo.db.wallet_transactions.insert_one(wallet_transaction)
 
+            funds_used_adj = float(item['money_amount']) - float(request.form.get("money_amount_sell"))
+
+            sell = {
+                "purchase_date": yesterday,
+                "ticker": request.form.get('ticker'),
+                "stock_amount": str(remaining_stock),
+                "purchase_price": request.form.get("purchase_price_sell"),
+                "money_amount": str(funds_used_adj),
+                "selling_price": request.form.get("selling_price"),
+                "purchase_by": session["user"]
+            }
+
+            mongo.db.closed_positions.insert_one(sell)
+
             return redirect(url_for('openPositions'))
 
         elif request.form.get(
             "stock_amount_sell") == request.form.get(
                 "stocks_owned"):
-            print("Sell all")
+
+            mongo.db.transactions.remove(
+                {"_id": ObjectId(position_id)})
+
+            sell = {
+                "purchase_date": yesterday,
+                "ticker": request.form.get('ticker'),
+                "stock_amount": str(remaining_stock),
+                "purchase_price": request.form.get("purchase_price_sell"),
+                "money_amount": request.form.get("money_amount_sell"),
+                "selling_price": request.form.get("selling_price"),
+                "purchase_by": session["user"]
+            }
+
+            mongo.db.closed_positions.insert_one(sell)
+
+            return redirect(url_for('openPositions'))
 
         elif request.form.get(
             "stock_amount_sell") > request.form.get(
@@ -408,7 +446,7 @@ def sell(position_id):
         {"username": session["user"]})["username"]
 
     return render_template("sell-stocks.html",
-                            username=username,
+                            getUsername=username,
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
                             funds_available=funds_available,
