@@ -17,6 +17,7 @@ from common import transactions
 from common import transaction_lst
 from common import stringify_number
 from common import stock_aapl
+from common import counter
 
 # instancing Flask
 app = Flask(__name__)
@@ -52,7 +53,9 @@ def register():
 
         for item in transaction_lst:
             profit_loss_lst.append(
-            round(((float(stock_aapl[0][yesterday]['4. close']) - float(item['purchase_price'])) * int(item['stock_amount'])), 2))
+                round(((float(stock_aapl[0][yesterday]['4. close']) -
+                float(item['purchase_price'])) *
+                int(item['stock_amount'])), 2))
 
         # check if username already exists
         existing_user = mongo.db.users.find_one(
@@ -114,7 +117,8 @@ def login():
                         transaction_lst=transaction_lst(session),
                         stock_aapl=stock_aapl,
                         yesterday=yesterday,
-                        funds_available=stringify_number(wallet()))
+                        funds_available=stringify_number(wallet()),
+                        counter=counter)
             else:
                 # if the password doesn't match
                 flash("Incorrect Username and/or Password")
@@ -158,7 +162,8 @@ def profile(username):
             transaction_lst=transaction_lst,
             stock_aapl=stock_aapl,
             yesterday=yesterday,
-            funds_available=stringify_number(wallet()))
+            funds_available=stringify_number(wallet()),
+            counter=counter())
 
     return render_template("login")
 

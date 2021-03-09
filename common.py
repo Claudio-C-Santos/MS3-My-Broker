@@ -47,13 +47,27 @@ def wallet():
     wallet_statements = []
 
     for statements in wallet_transactions:
-        wallet_statements.append(statements['money_amount'])
+        if session['user'] == statements['created_by']:
+            wallet_statements.append(statements['money_amount'])
 
     # account's funds
     initial_funds = 10000
     funds = initial_funds + sum(wallet_statements)
-    
+
     return funds
+
+
+def counter():
+    transactions = mongo.db.transactions.find()
+
+    counting = []
+
+    for transaction in transactions:
+        if session['user'] == transactions['created_by']:
+            counting.append(transaction)
+
+    return counting
+
 
 
 def stringify_number(el):

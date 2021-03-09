@@ -1,8 +1,7 @@
 [] Profile Page
     [] The user can only see positions open by him
 
-[] Stocks Page
-    [] ticker, purchase_price and money_amount are not being inserted into MongoDB
+[] Positions open: only count the user's open positions
 
 [] Optional: Add a viewing mode that user can see dashboard without logging in, some features will be limited. (idea: only display analysis feature)
 
