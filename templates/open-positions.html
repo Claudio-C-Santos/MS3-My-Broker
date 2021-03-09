@@ -13,29 +13,31 @@
     </div>
 
     {% for transaction in transaction_lst %}
-    <div class="row shadow py-2">
-        <div class="col s2 stock-quotes">
-            {{ transaction.ticker }}
-        </div>
-        <div class="col s2 stock-quotes">
-            {{ transaction.purchase_date }}
-        </div>
-        <div class="col s2 stock-quotes">
-            {{ transaction.purchase_price }}
-        </div>
-        <div class="col s2 stock-quotes">
-            {{ transaction.stock_amount }}
-        </div>
-        <div class="col s2 stock-quotes">
-            {{ (transaction.stock_amount|float * transaction.purchase_price|float)|round(2, 'floor') }}
-        </div>
-        <div class="col s2 stock-quotes">
-            {{ ((transaction.purchase_price|float - stock_aapl[0][yesterday]['4. close']|float) * transaction.stock_amount|int)|float|round(2, 'floor') }}
-        </div>
-        <div class="col s1 stock-quotes">
-            <a class="waves-effect waves-light btn-small red modal-trigger buy-stock-btn" href="{{ url_for('sell', position_id=transaction._id) }}">Sell</a>
-        </div>
-    </div>
+        {% if session.user|lower == transaction.created_by|lower %}
+            <div class="row shadow py-2">
+                <div class="col s2 stock-quotes">
+                    {{ transaction.ticker }}
+                </div>
+                <div class="col s2 stock-quotes">
+                    {{ transaction.purchase_date }}
+                </div>
+                <div class="col s2 stock-quotes">
+                    {{ transaction.purchase_price }}
+                </div>
+                <div class="col s2 stock-quotes">
+                    {{ transaction.stock_amount }}
+                </div>
+                <div class="col s2 stock-quotes">
+                    {{ (transaction.stock_amount|float * transaction.purchase_price|float)|round(2, 'floor') }}
+                </div>
+                <div class="col s2 stock-quotes">
+                    {{ ((transaction.purchase_price|float - stock_aapl[0][yesterday]['4. close']|float) * transaction.stock_amount|int)|float|round(2, 'floor') }}
+                </div>
+                <div class="col s1 stock-quotes">
+                    <a class="waves-effect waves-light btn-small red modal-trigger buy-stock-btn" href="{{ url_for('sell', position_id=transaction._id) }}">Sell</a>
+                </div>
+            </div>
+        {% endif %}
     {% endfor %}
 
 {% endblock %}

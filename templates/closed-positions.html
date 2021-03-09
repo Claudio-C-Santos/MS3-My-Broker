@@ -12,26 +12,28 @@
     </div>
 
     {% for transaction in closed_positions %}
-    <div class="row shadow py-2">
-        <div class="col s2 stock-quotes">
-            {{ transaction.ticker }}
-        </div>
-        <div class="col s2 stock-quotes">
-            {{ transaction.selling_date }}
-        </div>
-        <div class="col s2 stock-quotes">
-            {{ transaction.stock_amount }}
-        </div>
-        <div class="col s2 stock-quotes">
-            {{ transaction.purchase_price }}
-        </div>
-        <div class="col s2 stock-quotes">
-            {{ transaction.selling_price }}
-        </div>
-        <div class="col s2 stock-quotes">
-            {{ transaction.money_amount|float|round(2, 'floor') }}
-        </div>
-    </div>
+        {% if session.user|lower == transaction.created_by|lower %}
+            <div class="row shadow py-2">
+                <div class="col s2 stock-quotes">
+                    {{ transaction.ticker }}
+                </div>
+                <div class="col s2 stock-quotes">
+                    {{ transaction.selling_date }}
+                </div>
+                <div class="col s2 stock-quotes">
+                    {{ transaction.stock_amount }}
+                </div>
+                <div class="col s2 stock-quotes">
+                    {{ transaction.purchase_price }}
+                </div>
+                <div class="col s2 stock-quotes">
+                    {{ transaction.selling_price }}
+                </div>
+                <div class="col s2 stock-quotes">
+                    {{ transaction.money_amount|float|round(2, 'floor') }}
+                </div>
+            </div>
+        {% endif %}
     {% endfor %}
 
 {% endblock %}

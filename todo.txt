@@ -1,5 +1,4 @@
 [] Profile Page
-    [] Create Sell button on each open position
     [] The user can only see positions open by him
 
 [] Stocks Page

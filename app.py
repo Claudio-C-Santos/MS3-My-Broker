@@ -10,12 +10,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date, datetime, timedelta
 if os.path.exists("env.py"):
     import env
-# from common import getUsername
-
+from common import yesterday
+from common import getUsername
+from common import wallet
+from common import transactions
+from common import transaction_lst
+from common import stringify_number
 
 # instancing Flask
 app = Flask(__name__)
-
 
 # instancing Alpha Advantage API in order to retrieve quotes
 app_alpha = TimeSeries("Alpha_Advantage_key")
@@ -28,17 +31,6 @@ app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("Flask_Secret_Key")
 
 mongo = PyMongo(app)
-
-# Yesterday Selector
-dayValidator = datetime.now().strftime('%w')
-
-if dayValidator == '0':
-    yesterday = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
-elif dayValidator == '1':
-    yesterday = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
-else:
-    yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
-
 
 # Retrieve all data from mongoDB's "transactions" entries
 transactions = mongo.db.transactions.find()
@@ -53,20 +45,9 @@ profit_loss_lst = []
 
 for item in transaction_lst:
     profit_loss_lst.append(
-        round(((float(stock_aapl[0][yesterday]['4. close']) - float(item['purchase_price'])) * int(item['stock_amount'])), 2))
-
-# Retrieve all data from mongoDB's "wallet_transactions" entries
-wallet_transactions = mongo.db.wallet_transactions.find()
-
-wallet_statements = []
-
-for statements in wallet_transactions:
-    wallet_statements.append(statements['money_amount'])
-
-# account's funds
-initial_funds = 10000
-funds = initial_funds + sum(wallet_statements)
-funds_available = format(round(funds, 2), ",")
+        round(((float(stock_aapl[0][yesterday]['4. close']) -
+        float(item['purchase_price'])) *
+        int(item['stock_amount'])), 2))
 
 @app.route("/")
 def index():
@@ -121,9 +102,8 @@ def register():
             transaction_lst=transaction_lst,
             stock_aapl=stock_aapl,
             yesterday=yesterday,
-            funds_available=funds_available,
-            profit_loss_lst=profit_loss_lst,
-            wallet_statements=wallet_statements)
+            funds_available=stringify_number(wallet()),
+            profit_loss_lst=profit_loss_lst)
 
     return render_template("register.html")
 
@@ -153,9 +133,8 @@ def login():
                         transaction_lst=transaction_lst,
                         stock_aapl=stock_aapl,
                         yesterday=yesterday,
-                        funds_available=funds_available,
-                        profit_loss_lst=profit_loss_lst,
-                        wallet_statements=wallet_statements)
+                        funds_available=stringify_number(wallet()),
+                        profit_loss_lst=profit_loss_lst)
             else:
                 # if the password doesn't match
                 flash("Incorrect Username and/or Password")
@@ -170,126 +149,48 @@ def login():
 
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
-    username = mongo.db.users.find_one(
-    {"username": session["user"]})["username"]
-
-    # Retrieve all data from mongoDB's "transactions" entries
-    transactions = mongo.db.transactions.find()
-
-    # Object where each transaction is appended to from the for loop
-    transaction_lst = []
-
-    for items in transactions:
-        transaction_lst.append(items)
-
-    profit_loss_lst = []
-
-    for item in transaction_lst:
-        profit_loss_lst.append(
-            round(((float(stock_aapl[0][yesterday]['4. close']) - float(item['purchase_price'])) * int(item['stock_amount'])), 2))
 
     first_name = mongo.db.users.find_one(
         {"username": session["user"]})["first_name"]
 
-    # Retrieve all data from mongoDB's "wallet_transactions" entries
-    wallet_transactions = mongo.db.wallet_transactions.find()
-
-    wallet_statements = []
-
-    for statements in wallet_transactions:
-        wallet_statements.append(statements['money_amount'])
-
-    # account's funds
-    initial_funds = 10000
-    funds = initial_funds + sum(wallet_statements)
-    funds_available = format(round(funds, 2), ",")
-
     if session["user"]:
         return render_template(
-            "profile.html", username=username,
+            "profile.html", username=getUsername(session),
             first_name=first_name,
             transactions=transactions,
             transaction_lst=transaction_lst,
             stock_aapl=stock_aapl,
             yesterday=yesterday,
-            funds_available=funds_available,
-            profit_loss_lst=profit_loss_lst,
-            wallet_statements=wallet_statements)
+            funds_available=stringify_number(wallet()),
+            profit_loss_lst=profit_loss_lst)
 
     return render_template("login")
 
 
 @app.route("/stocks")
 def stocks():
-    # Retrieve all data from mongoDB's "wallet_transactions" entries
-    wallet_transactions = mongo.db.wallet_transactions.find()
-
-    wallet_statements = []
-
-    for statements in wallet_transactions:
-        wallet_statements.append(statements['money_amount'])
-
-    # account's funds
-    initial_funds = 10000
-    funds = initial_funds + sum(wallet_statements)
-    funds_available = format(round(funds, 2), ",")
-
-    # use the sessions's data from db
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
-
     return render_template("stocks.html",
-                            username=username,
+                            username=getUsername(session),
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
-                            funds_available=funds_available,
+                            funds_available=stringify_number(wallet()),
                             profit_loss_lst=profit_loss_lst)
 
 
 @app.route("/purchase_stocks")
 def purchaseStocks():
-    # Retrieve all data from mongoDB's "wallet_transactions" entries
-    wallet_transactions = mongo.db.wallet_transactions.find()
-
-    wallet_statements = []
-
-    for statements in wallet_transactions:
-        wallet_statements.append(statements['money_amount'])
-
-    # account's funds
-    initial_funds = 10000
-    funds = initial_funds + sum(wallet_statements)
-    funds_available = format(round(funds, 2), ",")
-
-    # use the sessions's data from db
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
-
     return render_template("purchase-stocks.html",
-                            getUsername=username,
+                            username=getUsername(session),
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
-                            funds_available=funds_available,
+                            funds_available=stringify_number(wallet()),
                             profit_loss_lst=profit_loss_lst)
 
 
 @app.route('/purchase', methods=["GET", "POST"])
 def purchase():
-    # Retrieve all data from mongoDB's "wallet_transactions" entries
-    wallet_transactions = mongo.db.wallet_transactions.find()
-
-    wallet_statements = []
-
-    for statements in wallet_transactions:
-        wallet_statements.append(statements['money_amount'])
-
-    # account's funds
-    initial_funds = 10000
-    funds = initial_funds + sum(wallet_statements)
-    funds_available = format(round(funds, 2), ",")
-
     if request.method == "POST":
-        if funds >= float(request.form.get("money_amount")):
+        if wallet() >= float(request.form.get("money_amount")):
             purchase = {
                 "purchase_date": yesterday,
                 "ticker": request.form.get('ticker'),
@@ -317,87 +218,19 @@ def purchase():
 
 
 @app.route('/open-positions')
-def openPositions(): 
-    # use the sessions's data from db
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
-
-    # Retrieve all data from mongoDB's "transactions" entries
-    transactions = mongo.db.transactions.find()
-
-    # Object where each transaction is appended to from the for loop
-    transaction_lst = []
-
-    for items in transactions:
-        transaction_lst.append(items)
-
-    profit_loss_lst = []
-
-    for item in transaction_lst:
-        profit_loss_lst.append(
-            round(((
-                float(stock_aapl[0][yesterday]['4. close']) -
-                float(item['purchase_price'])) *
-                int(item['stock_amount'])), 2))
-
-    # Retrieve all data from mongoDB's "wallet_transactions" entries
-    wallet_transactions = mongo.db.wallet_transactions.find()
-
-    wallet_statements = []
-
-    for statements in wallet_transactions:
-        wallet_statements.append(statements['money_amount'])
-
-    # account's funds
-    initial_funds = 10000
-    funds = initial_funds + sum(wallet_statements)
-    funds_available = format(round(funds, 2), ",")
-
+def openPositions():
     return render_template("open-positions.html",
-                            username=username,
+                            username=getUsername(session),
                             transactions=transactions,
                             transaction_lst=transaction_lst,
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
-                            funds_available=funds_available,
-                            profit_loss_lst=profit_loss_lst,
-                            wallet_statements=wallet_statements)
+                            funds_available=stringify_number(wallet()),
+                            profit_loss_lst=profit_loss_lst)
 
 
 @app.route("/sell/<position_id>", methods=["GET", "POST"])
 def sell(position_id):
-    # Retrieve all data from mongoDB's "wallet_transactions" entries
-    wallet_transactions = mongo.db.wallet_transactions.find()
-
-    wallet_statements = []
-
-    for statements in wallet_transactions:
-        wallet_statements.append(statements['money_amount'])
-
-    # account's funds
-    initial_funds = 10000
-    funds = initial_funds + sum(wallet_statements)
-    funds_available = format(round(funds, 2), ",")
-
-    # use the sessions's data from db
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
-
-    # Retrieve all data from mongoDB's "transactions" entries
-    transactions = mongo.db.transactions.find()
-
-    # Object where each transaction is appended to from the for loop
-    transaction_lst = []
-
-    for items in transactions:
-        transaction_lst.append(items)
-
-    profit_loss_lst = []
-
-    for item in transaction_lst:
-        profit_loss_lst.append(
-            round(((float(stock_aapl[0][yesterday]['4. close']) - float(item['purchase_price'])) * int(item['stock_amount'])), 2))
-
     if request.method == "POST":
         if request.form.get(
             "stock_amount_sell") < request.form.get(
@@ -430,7 +263,7 @@ def sell(position_id):
             funds_used_adj = float(item['money_amount']) - float(request.form.get("money_amount_sell"))
 
             sell = {
-                "purchase_date": yesterday,
+                "selling_date": yesterday,
                 "ticker": request.form.get('ticker'),
                 "stock_amount": str(remaining_stock),
                 "purchase_price": request.form.get("purchase_price_sell"),
@@ -453,6 +286,7 @@ def sell(position_id):
             sell = {
                 "selling_date": yesterday,
                 "ticker": request.form.get('ticker'),
+                "stock_amount": request.form.get("stock_amount_sell"),
                 "purchase_price": request.form.get("purchase_price_sell"),
                 "money_amount": request.form.get("money_amount_sell"),
                 "selling_price": request.form.get("selling_price"),
@@ -472,37 +306,28 @@ def sell(position_id):
     open_position = mongo.db.transactions.find_one(
         {"_id": ObjectId(position_id)})
 
-    # use the sessions's data from db
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
-
     return render_template("sell-stocks.html",
-                            username=username,
+                            username=getUsername(session),
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
-                            funds_available=funds_available,
+                            funds_available=stringify_number(wallet()),
                             profit_loss_lst=profit_loss_lst,
                             open_position=open_position)
 
 
 @app.route("/closed_positions")
-def closedPositions(): 
-    # use the sessions's data from db
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
-
+def closedPositions():
     # Retrieve all data from mongoDB's "closed transactions" entries
     closed_positions = mongo.db.closed_positions.find()
 
     return render_template("closed-positions.html",
-                            username=username,
+                            username=getUsername(session),
                             transactions=transactions,
                             transaction_lst=transaction_lst,
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
-                            funds_available=funds_available,
+                            funds_available=stringify_number(wallet()),
                             profit_loss_lst=profit_loss_lst,
-                            wallet_statements=wallet_statements,
                             closed_positions=closed_positions)
 
 
