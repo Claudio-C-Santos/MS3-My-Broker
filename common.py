@@ -20,13 +20,8 @@ app.secret_key = os.environ.get("Flask_Secret_Key")
 
 mongo = PyMongo(app)
 
-
-def getUsername(session):
-    # use the sessions's data from db
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
-    return username
-
+# Retrieve stock info from Alpha Advantage API
+stock_aapl = app_alpha.get_daily_adjusted("AAPL")
 
 # Yesterday Selector
 dayValidator = datetime.now().strftime('%w')
@@ -37,6 +32,13 @@ elif dayValidator == '1':
     yesterday = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
 else:
     yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+
+
+def getUsername(session):
+    # use the sessions's data from db
+    username = mongo.db.users.find_one(
+        {"username": session["user"]})["username"]
+    return username
 
 
 def wallet():
@@ -59,7 +61,7 @@ def stringify_number(el):
     return funds_available
 
 
-def transactions(session):
+def transactions():
     # Retrieve all data from mongoDB's "transactions" entries
     transactions = mongo.db.transactions.find()
     return transactions

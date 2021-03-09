@@ -72,7 +72,7 @@
         <div class="col s2"><b>Profit/Loss</b></div>
     </div>
     
-    
+
     {% for transaction in transaction_lst %}
         {% if session.user|lower == transaction.created_by|lower %}
             <div class="row shadow py-2">
@@ -97,6 +97,5 @@
             </div>
         {% endif %}
     {% endfor %}
-
 
 {% endblock %}
