@@ -24,6 +24,10 @@ mongo = PyMongo(app)
 stock_aapl = app_alpha.get_daily_adjusted("AAPL")
 
 # Yesterday Selector
+# Since the API only provides yesterday's stock prices,
+# the if statement takes into consideration weekends because no price
+# is available during these days.
+# Instead it provides the last available prices
 dayValidator = datetime.now().strftime('%w')
 
 if dayValidator == '0':
@@ -34,6 +38,7 @@ else:
     yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
 
 
+# Function used to retrieve the username string from session['user']
 def getUsername(session):
     # use the sessions's data from db
     username = mongo.db.users.find_one(
@@ -41,6 +46,9 @@ def getUsername(session):
     return username
 
 
+# Function used to calculate the amount of funds left
+# The function uses a database on MongoDB where all the transactions are store,
+# then it just adds or substracts them to the initial 10k
 def wallet():
     wallet_transactions = mongo.db.wallet_transactions.find()
 
@@ -56,18 +64,21 @@ def wallet():
 
     return funds
 
-
+# Function used to transform numbers into string and add the thousand's comma
 def stringify_number(el):
     funds_available = format(round(el, 2), ",")
     return funds_available
 
 
+# Function used to access all the transactions sotre in MongoDB's database
 def transactions():
     # Retrieve all data from mongoDB's "transactions" entries
     transactions = mongo.db.transactions.find()
     return transactions
 
 
+# Function based ont transactions() but it provides a list of transactions
+# This is so to make possible access each key:value pairs
 def transaction_lst(session):
     # Retrieve all data from mongoDB's "transactions" entries
     transactions = mongo.db.transactions.find()

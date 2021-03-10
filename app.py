@@ -31,11 +31,15 @@ app.secret_key = os.environ.get("secret_key")
 
 mongo = PyMongo(app)
 
+
+# Decorator created to render the index page
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
+# Decorator created to store the user's registration in MongoDB
+# After registering the user is redirected to profile page
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -91,6 +95,9 @@ def register():
     return render_template("register.html")
 
 
+# Decorator created to authenticate the login submitted byt the user
+# Once verified the user is redirected to profile page otherwise a
+# flash message will be displayed
 @app.route("/login", methods={"GET", "POST"})
 def login():
     if request.method == "POST":
@@ -129,6 +136,7 @@ def login():
     return render_template("login.html")
 
 
+# Decorator to render the profile page and display all the info included
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
     # Retrieve all data from mongoDB's "transactions" entries
@@ -165,6 +173,7 @@ def profile(username):
     return render_template("login")
 
 
+# Decorator used to render the stock page
 @app.route("/stocks")
 def stocks():
     return render_template("stocks.html",
@@ -174,6 +183,7 @@ def stocks():
                             funds_available=stringify_number(wallet()))
 
 
+# Decorator used to render the page where the user can purchase stocks
 @app.route("/purchase_stocks")
 def purchaseStocks():
     return render_template("purchase-stocks.html",
@@ -183,6 +193,8 @@ def purchaseStocks():
                             funds_available=stringify_number(wallet()))
 
 
+# Decorator used to process the purchase submitted by the user
+# The purchase details are store in MongoDB
 @app.route('/purchase', methods=["GET", "POST"])
 def purchase():
     if request.method == "POST":
@@ -213,6 +225,7 @@ def purchase():
             return redirect(url_for("stocks"))
 
 
+# Decorator to display current open positions, in other words the stock owned
 @app.route('/open-positions')
 def openPositions():
     return render_template("open-positions.html",
@@ -224,6 +237,10 @@ def openPositions():
                             funds_available=stringify_number(wallet()))
 
 
+# Decorator used to process the sell submitted by the user
+# This decorator has an if statement dividing it into three section
+# depending if the amount of stocks the user wants to sell is
+# smaller, higher or the same has the stocks owned
 @app.route("/sell/<position_id>", methods=["GET", "POST"])
 def sell(position_id):
     if request.method == "POST":
@@ -335,6 +352,8 @@ def sell(position_id):
                             open_position=open_position)
 
 
+# Decorator used to render a list of closed positions
+# The closed positions are stored in MongoDB
 @app.route("/closed_positions")
 def closedPositions():
     # Retrieve all data from mongoDB's "closed transactions" entries
@@ -350,6 +369,7 @@ def closedPositions():
                             closed_positions=closed_positions)
 
 
+# Decorator to process logout request
 @app.route("/logout")
 def logout():
     # remove user's session cookie
