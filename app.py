@@ -160,8 +160,7 @@ def profile(username):
             transaction_lst=transaction_lst,
             stock_aapl=stock_aapl,
             yesterday=yesterday,
-            funds_available=stringify_number(wallet()),
-            counter=counter())
+            funds_available=stringify_number(wallet()))
 
     return render_template("login")
 
