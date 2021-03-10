@@ -8,6 +8,7 @@ if (int_funds_profile < 0) {
     funds_el_profile.setAttribute("class", "negative_wallet_profile");
 }
 
+
 let funds_el_bar = document.querySelector("#funds_available_bar")
 let funds_bar = document.querySelector("#funds_available_bar").innerHTML
 
