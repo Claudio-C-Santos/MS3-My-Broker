@@ -116,8 +116,7 @@ def login():
                         transaction_lst=transaction_lst(session),
                         stock_aapl=stock_aapl,
                         yesterday=yesterday,
-                        funds_available=stringify_number(wallet()),
-                        counter=counter)
+                        funds_available=stringify_number(wallet()))
             else:
                 # if the password doesn't match
                 flash("Incorrect Username and/or Password")
