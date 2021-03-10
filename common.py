@@ -57,19 +57,6 @@ def wallet():
     return funds
 
 
-def counter():
-    transactions = mongo.db.transactions.find()
-
-    counting = []
-
-    for transaction in transactions:
-        if session['user'] == transactions['created_by']:
-            counting.append(transaction)
-
-    return counting
-
-
-
 def stringify_number(el):
     funds_available = format(round(el, 2), ",")
     return funds_available

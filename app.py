@@ -17,7 +17,6 @@ from common import transactions
 from common import transaction_lst
 from common import stringify_number
 from common import stock_aapl
-from common import counter
 
 # instancing Flask
 app = Flask(__name__)
