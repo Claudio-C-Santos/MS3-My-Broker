@@ -1,3 +1,4 @@
+// This code automatically calculates the total purchase price when purchase stocks.
 let input_amount = document.querySelector("#stock_amount");
 let stock_quote = document.querySelector("#purchase_price");
 let total_amount = document.querySelector("#money_amount");

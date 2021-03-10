@@ -1,5 +1,7 @@
+/*  Font Family import from google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
 
+/* ------------------------------------------------------------General Stylings  */
 body {
     margin: 0px;
     min-height: 100%;
@@ -8,6 +10,13 @@ body {
     background-attachment: fixed;
     background-size: cover;
 }
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ------------------------------------------------------------Intro Screen */
 
 #introBox {
     margin: 100px 60px;
@@ -37,6 +46,8 @@ body {
     margin-left: 15px;
 }
 
+/* ------------------------------------------------------------Buttons */
+
 .btn-large {
     margin: 20px;
     background-color: blue;
@@ -57,6 +68,13 @@ body {
     height: 100px;
 }
 
+.buy-stock-btn:hover {
+    color:white; 
+    text-decoration: none;
+}
+
+/* ------------------------------------------------------------Flash Messaging */
+
 #flash-messages {
     height:100px;
     background-color: pink;
@@ -72,20 +90,21 @@ body {
     color: black;
 }
 
+
+/* ------------------------------------------------------------Registration Page */
+
 #registration-form {
     margin-left: 450px;
     margin-right: 450px;
 }
 
-.center {
-    margin-left: auto;
-    margin-right: auto;
-}
-
+/* ------------------------------------------------------------Authentication base page */
 .margins-10 {
     margin: 10px;
 }
 
+
+/* ------------------------------------------------------------Open(Open Position and Profile pages) and Closed Positions  */
 .positions_title {
   box-shadow: 0 0.25rem rgb(54, 185, 204, 0.55);
 }
@@ -99,10 +118,7 @@ body {
     text-align: center;
 }
 
-.buy-stock-btn:hover {
-    color:white; 
-    text-decoration: none;
-}
+/* ------------------------------------------------------------Profile Page  */
 
 .negative_wallet_profile {
     font-size: 1.75rem;
@@ -111,19 +127,20 @@ body {
     line-height: 1.2;
 }
 
+/* ------------------------------------------------------------Top Nav Bar */
+
 .negative_wallet_bar {
     color: red;
     font-weight: 700 !important;
     line-height: 1.2;
 }
 
+/* ------------------------------------------------------------Purchase/Sell Stock Pages */
 .margin-top {
     margin-top: 20px;
 }
 
-.modal-title {
-    margin: 25px;
-}
+/* ------------------------------------------------------------MEDIA QUERIES */
 
 @media screen and (min-width: 425px) and (max-width: 1025px){
 
@@ -131,7 +148,6 @@ body {
     margin-left: 50px;
     margin-right: 50px;
 }
-
 
 }
 

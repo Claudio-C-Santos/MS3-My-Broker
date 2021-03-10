@@ -2,8 +2,10 @@
 let funds_el_profile = document.querySelector("#funds_available_profile")
 let funds_profile = document.querySelector("#funds_available_profile").innerHTML
 
+// This element's innerHTML is a string, this line of code removes the comma and turns it into an floater
 int_funds_profile = parseFloat(funds_profile.replace(",", ""))
 
+// Changes in the element's classes when the innerHTML is a negative number
 if (int_funds_profile < 0) {
     funds_el_profile.removeAttribute("class", "text-gray-800")
     funds_el_profile.setAttribute("class", "negative_wallet_profile");
