@@ -1,39 +1,48 @@
 {% extends 'base.html' %}
-{% block content %}
-    <h3 class="left-align">Closed Positions</h3>
+    {% block content %}
+        <!-- Page Title -->
+        <h3 class="left-align">Closed Positions</h3>
 
-    <div class="row positions_title py-2">
-        <div class="col s2 position_title"><b>Symbol</b></div>
-        <div class="col s2 position_title"><b>Selling Date</b></div>
-        <div class="col s2 position_title"><b>Stocks Sold</b></div>
-        <div class="col s2 position_title"><b>Purchase Price</b></div>
-        <div class="col s2 position_title"><b>Selling Price</b></div>
-        <div class="col s2 position_title"><b>Profit/Loss</b></div>
-    </div>
+        <!-- Titles for list of closed positions -->
+        <div class="row positions_title py-2">
+            <div class="col s2 position_title"><b>Symbol</b></div>
+            <div class="col s2 position_title"><b>Selling Date</b></div>
+            <div class="col s2 position_title"><b>Stocks Sold</b></div>
+            <div class="col s2 position_title"><b>Purchase Price</b></div>
+            <div class="col s2 position_title"><b>Selling Price</b></div>
+            <div class="col s2 position_title"><b>Profit/Loss</b></div>
+        </div>
 
-    {% for transaction in closed_positions %}
-        {% if session.user|lower == transaction.created_by|lower %}
-            <div class="row shadow py-2">
-                <div class="col s2 stock-quotes">
-                    {{ transaction.ticker }}
+        <!-- for loop over the transactions on MongoDB's database in order to display them on the page-->
+        {% for transaction in closed_positions %}
+            {% if session.user|lower == transaction.created_by|lower %}
+                <div class="row shadow py-2">
+                    <!-- Ticker Symbol -->
+                    <div class="col s2 stock-quotes">
+                        {{ transaction.ticker }}
+                    </div>
+                    <!-- Selling Date -->
+                    <div class="col s2 stock-quotes">
+                        {{ transaction.selling_date }}
+                    </div>
+                    <!-- Amount of stocks sold -->
+                    <div class="col s2 stock-quotes">
+                        {{ transaction.stock_amount }}
+                    </div>
+                    <!-- Purchase Price -->
+                    <div class="col s2 stock-quotes">
+                        {{ transaction.purchase_price }}
+                    </div>
+                    <!-- Selling Price -->
+                    <div class="col s2 stock-quotes">
+                        {{ transaction.selling_price }}
+                    </div>
+                    <!-- Amount of Profit/Loss -->
+                    <div class="col s2 stock-quotes">
+                        {{ '{:,.2f}'.format( (transaction.selling_price|float - transaction.purchase_price|float) * transaction.stock_amount|int ) }}
+                    </div>
                 </div>
-                <div class="col s2 stock-quotes">
-                    {{ transaction.selling_date }}
-                </div>
-                <div class="col s2 stock-quotes">
-                    {{ transaction.stock_amount }}
-                </div>
-                <div class="col s2 stock-quotes">
-                    {{ transaction.purchase_price }}
-                </div>
-                <div class="col s2 stock-quotes">
-                    {{ transaction.selling_price }}
-                </div>
-                <div class="col s2 stock-quotes">
-                    {{ '{:,.2f}'.format( (transaction.selling_price|float - transaction.purchase_price|float) * transaction.stock_amount|int ) }}
-                </div>
-            </div>
-        {% endif %}
-    {% endfor %}
+            {% endif %}
+        {% endfor %}
 
-{% endblock %}
+    {% endblock %}

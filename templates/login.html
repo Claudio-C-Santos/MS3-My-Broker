@@ -1,34 +1,48 @@
 {% extends "authentication.html" %}
-{% block content %}
-    <h3 class="center-align">Log In</h3>
-    <div class="row" id="registration-form">
-        <form class="col s12" method="POST" action="{{ url_for('login') }}">
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="fas fa-user-cog prefix light-gray-text"></i>
-                    <input id="username" name="username" type="text" class="validate" minlength="5" maxlength="15" pattern="[a-zA-Z0-9]{5,15}" required>
-                    <label for="username">Username</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="fas fa-unlock-alt prefix light-gray-text"></i>
-                    <input id="password" name="password" type="password" class="validate" minlength="5" maxlength="15" pattern="[a-zA-Z0-9]{5,15}" required>
-                    <label for="password">Password</label>
-                </div>
-            </div>
-            <div class="center-align">
-                <button class="waves-effect waves-light btn-large custom-btn" type="submit"><i class="fas fa-sign-in-alt right"></i>Login</button> 
-            </div> 
-        </form>
-    </div>
+    {% block content %}
+        <!-- Page Title -->
+        <h3 class="center-align">Log In</h3>
 
-    <div class="row">
-        <div class="col s4">
-            <p class="center-align">
-                Don't have an account?
-                <a href="{{ url_for('register') }}">Register</a>
-            </p>
+        <!-- Form's Row -->
+        <div class="row" id="registration-form">
+
+            <!-- Login Form -->
+            <form class="col s12" method="POST" action="{{ url_for('login') }}">
+                <!-- Username Input -->
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="fas fa-user-cog prefix light-gray-text"></i>
+                        <input id="username" name="username" type="text" class="validate" minlength="5" maxlength="15"
+                            pattern="[a-zA-Z0-9]{5,15}" required>
+                        <label for="username">Username</label>
+                    </div>
+                </div>
+
+                <!-- Password Input -->
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="fas fa-unlock-alt prefix light-gray-text"></i>
+                        <input id="password" name="password" type="password" class="validate" minlength="5" maxlength="15"
+                            pattern="[a-zA-Z0-9]{5,15}" required>
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+
+                <!-- Login Button -->
+                <div class="center-align">
+                    <button class="waves-effect waves-light btn-large custom-btn" type="submit"><i
+                            class="fas fa-sign-in-alt right"></i>Login</button>
+                </div>
+            </form>
         </div>
-    </div>
-{% endblock %}
+
+        <!-- Link to Register Page -->
+        <div class="row">
+            <div class="col s4">
+                <p class="center-align">
+                    Don't have an account?
+                    <a href="{{ url_for('register') }}">Register</a>
+                </p>
+            </div>
+        </div>
+    {% endblock %}

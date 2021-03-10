@@ -1,46 +1,63 @@
 {% extends "authentication.html" %}
-{% block content %}
-    <h3 class="center-align">Create an account</h3>
-    <p class="center-align">Just insert your details to create a free account and start practice your investment skills.</p>
-    <div class="row" id="registration-form">
-        <form class="col s12" method="POST" action="{{ url_for('register') }}">
-            <div class="row">
-                <div class="input-field col s6">
-                    <i class="fas fa-signature prefix light-gray-text"></i>
-                    <input id="first_name" name="first_name" type="text" class="validate" required>
-                    <label for="first_name">First Name</label>
-                </div>
-                <div class="input-field col s6">
-                    <input id="last_name" name="last_name" type="text" class="validate" required>
-                    <label for="last_name">Last Name</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="fas fa-user-plus prefix light-gray-text"></i>
-                    <input id="username" name="username" type="text" class="validate" minlength="5" maxlength="15" pattern="[a-zA-Z0-9]{5,15}" required>
-                    <label for="username">Username</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="fas fa-unlock-alt prefix light-gray-text"></i>
-                    <input id="password" name="password" type="password" class="validate" minlength="5" maxlength="15" pattern="[a-zA-Z0-9]{5,15}" required>
-                    <label for="password">Password</label>
-                </div>
-            </div>
-            <div class="center-align">
-                <button class="waves-effect waves-light btn-large custom-btn" type="submit"><i class="fas fa-user-plus right"></i>Register</button> 
-            </div> 
-        </form>
-    </div>
+    {% block content %}
+        <!-- Title -->
+        <h3 class="center-align">Create an account</h3>
+        <p class="center-align">Just insert your details to create a free account and start practice your investment skills.</p>
+        
+        <!-- Registration Form -->
+        <div class="row" id="registration-form">
+            <form class="col s12" method="POST" action="{{ url_for('register') }}">
+                <div class="row">
 
-    <div class="row">
-        <div class="col s4">
-            <p class="center-align">
-                Already have an account?
-                <a href="{{ url_for('login') }}">Login</a>
-            </p>
+                    <!-- First Name Input Field -->
+                    <div class="input-field col s6">
+                        <i class="fas fa-signature prefix light-gray-text"></i>
+                        <input id="first_name" name="first_name" type="text" class="validate" required>
+                        <label for="first_name">First Name</label>
+                    </div>
+
+                    <!-- Last Name Input Field -->
+                    <div class="input-field col s6">
+                        <input id="last_name" name="last_name" type="text" class="validate" required>
+                        <label for="last_name">Last Name</label>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <!-- Username Input Field -->
+                    <div class="input-field col s12">
+                        <i class="fas fa-user-plus prefix light-gray-text"></i>
+                        <input id="username" name="username" type="text" class="validate" minlength="5" maxlength="15"
+                            pattern="[a-zA-Z0-9]{5,15}" required>
+                        <label for="username">Username</label>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <!-- Password Input Field -->
+                    <div class="input-field col s12">
+                        <i class="fas fa-unlock-alt prefix light-gray-text"></i>
+                        <input id="password" name="password" type="password" class="validate" minlength="5" maxlength="15"
+                            pattern="[a-zA-Z0-9]{5,15}" required>
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+
+                <!-- Register Button -->
+                <div class="center-align">
+                    <button class="waves-effect waves-light btn-large custom-btn" type="submit"><i
+                            class="fas fa-user-plus right"></i>Register</button>
+                </div>
+            </form>
         </div>
-    </div>
-{% endblock %}
+
+        <!-- Link to login page -->
+        <div class="row">
+            <div class="col s4">
+                <p class="center-align">
+                    Already have an account?
+                    <a href="{{ url_for('login') }}">Login</a>
+                </p>
+            </div>
+        </div>
+    {% endblock %}

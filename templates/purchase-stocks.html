@@ -2,19 +2,32 @@
 {% block content %}
     <div id="row">
         <div class="col s12 m5">
+            <!-- Purchase Stock Card -->
             <div class="card-panel">
+
+                <!-- Title -->
                 <div class="col s12">
                     <h4 id="purchase">Purchase Stocks</h4>
                 </div>
+
+                <!-- Divider -->
                 <div class="divider"></div>
+
+                <!-- Purchase Form -->
                 <div class="col s12 margin-top">
                     <form class="col s12" method="POST" action="{{ url_for('purchase') }}">
+
+                        <!-- Readonly fields -->
                         <div class="row">
+
+                            <!-- Ticker Symbol Readonly -->
                             <div class="col s6">
                                 <label class="center_label" for="ticker">Symbol</label>
                                 <input readonly id="ticker" name="ticker" value="AAPL" type="text"
                                     class="validate disabled">
                             </div>
+
+                            <!-- Purchase Price Readonly -->
                             <div class="col s6">
                                 <label class="center_label" for="purchase_price">Purchase Price</label>
                                 <input readonly id="purchase_price" name="purchase_price"
@@ -22,6 +35,8 @@
                                     type="number" class="validate disabled">
                             </div>
                         </div>
+
+                        <!-- Amount of stocks to purchase input -->
                         <div class="container">
                             <div class="col s1 offset-s2">
                                 <label class="center_label" for="stock_amount">Amount</label>
@@ -29,12 +44,17 @@
                                     class="validate" required>
                             </div>
                         </div>
+
+                        <!-- Necessary funds fiel which is automatically filled by JS code on script -->
+                            <!-- JS code can be found on static/js/script-1.js -->
                         <div class="container">
                             <div class="col s1 offset-s2">
                                 <label class="center_label" for="money_amount">Necessary Funds</label>
                                 <input readonly id="money_amount" name="money_amount" type="number" class="disabled">
                             </div>
                         </div>
+
+                        <!-- Finalize Button -->
                         <div class="center-align">
                             <button class="waves-effect waves-light btn-large custom-btn green" type="submit"><i
                                     class="fas fa-shopping-cart right"></i>Finalize</button>

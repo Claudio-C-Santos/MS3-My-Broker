@@ -1,82 +1,84 @@
 {% extends "base.html" %}
-{% block content %}
-    <h3 class="left-align">Hi there, {{ first_name }}!</h3>
-    <p class="left-align">This is your personal dashboard where you can find an overview of your account</p>
+    {% block content %}
+        <!-- Welcome message -->
+        <h3 class="left-align">Hi there, {{ first_name }}!</h3>
+        <p class="left-align">This is your personal dashboard where you can find an overview of your account</p>
 
-    <div class="row height-zero">
-    
-        <!-- Available Funds Card -->
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-info shadow py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-m font-weight-bold text-info text-uppercase mb-1">Available Funds</div>
-                            <div class="h3 mb-0 font-weight-bold text-gray-800" id="funds_available_profile">
-                                {{ funds_available }}  
+        <div class="row height-zero">
+
+            <!-- Available Funds Card -->
+            <div class="col-xl-6 col-md-6 mb-4">
+                <div class="card border-left-info shadow py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-m font-weight-bold text-info text-uppercase mb-1">Available Funds</div>
+                                <div class="h3 mb-0 font-weight-bold text-gray-800" id="funds_available_profile">
+                                    {{ funds_available }}
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-wallet fa-2x text-gray-300"></i>
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <i class="fas fa-wallet fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profit/Loss Card -->
+            <div class="col-xl-6 col-md-6 mb-4">
+                <div class="card border-left-info shadow py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-m font-weight-bold text-info text-uppercase mb-1">Profit/Loss</div>
+                                <div class="h3 mb-0 font-weight-bold text-gray-800" id="profit_loss_profile">
+                                    {{ profit_loss_lst|sum|round(2, 'floor') }}
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    
-        <!-- Profit/Loss -->
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-info shadow py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-m font-weight-bold text-info text-uppercase mb-1">Profit/Loss</div>
-                            <div class="h3 mb-0 font-weight-bold text-gray-800" id="profit_loss_profile">
-                                {{ profit_loss_lst|sum|round(2, 'floor') }}
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-chart-line fa-2x text-gray-300"></i>
-                        </div>
+
+        <!-- Titles for list of open positions -->
+        <div class="row positions_title py-2">
+            <div class="col s2 "><b>Symbol</b></div>
+            <div class="col s2"><b>Purchase Date</b></div>
+            <div class="col s2"><b>Unit Price</b></div>
+            <div class="col s2"><b>Amount of Stocks</b></div>
+            <div class="col s2"><b>Funds Used</b></div>
+            <div class="col s2"><b>Profit/Loss</b></div>
+        </div>
+
+        <!-- for loop over the transactions on MongoDB's database in order to display them on the page-->
+        {% for transaction in transaction_lst %}
+            {% if session.user|lower == transaction.created_by|lower %}
+                <div class="row shadow py-2">
+                    <div class="col s2 stock-quotes">
+                        {{ transaction.ticker }}
+                    </div>
+                    <div class="col s2 stock-quotes">
+                        {{ transaction.purchase_date }}
+                    </div>
+                    <div class="col s2 stock-quotes">
+                        {{ transaction.purchase_price }}
+                    </div>
+                    <div class="col s2 stock-quotes">
+                        {{ transaction.stock_amount }}
+                    </div>
+                    <div class="col s2 stock-quotes">
+                        {{ '{:,.2f}'.format((transaction.stock_amount|float * transaction.purchase_price|float)|round(3, 'floor')) }}
+                    </div>
+                    <div class="col s2 stock-quotes">
+                        {{ ((stock_aapl[0][yesterday]['4. close']|float - transaction.purchase_price|float) * transaction.stock_amount|int)|float|round(2, 'floor') }}
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            {% endif %}
+        {% endfor %}
 
-    <div class="row positions_title py-2">
-        <div class="col s2 "><b>Symbol</b></div>
-        <div class="col s2"><b>Purchase Date</b></div>
-        <div class="col s2"><b>Unit Price</b></div>
-        <div class="col s2"><b>Amount of Stocks</b></div>
-        <div class="col s2"><b>Funds Used</b></div>
-        <div class="col s2"><b>Profit/Loss</b></div>
-    </div>
-    
-
-    {% for transaction in transaction_lst %}
-        {% if session.user|lower == transaction.created_by|lower %}
-            <div class="row shadow py-2">
-                <div class="col s2 stock-quotes">
-                    {{ transaction.ticker }}
-                </div>
-                <div class="col s2 stock-quotes">
-                    {{ transaction.purchase_date }}
-                </div>
-                <div class="col s2 stock-quotes">
-                    {{ transaction.purchase_price }}
-                </div>
-                <div class="col s2 stock-quotes">
-                    {{ transaction.stock_amount }}
-                </div>
-                <div class="col s2 stock-quotes">
-                    {{ '{:,.2f}'.format((transaction.stock_amount|float * transaction.purchase_price|float)|round(3, 'floor')) }}
-                </div>
-                <div class="col s2 stock-quotes">
-                    {{ ((stock_aapl[0][yesterday]['4. close']|float - transaction.purchase_price|float) * transaction.stock_amount|int)|float|round(2, 'floor') }}
-                </div>
-            </div>
-        {% endif %}
-    {% endfor %}
-
-{% endblock %}
+    {% endblock %}
