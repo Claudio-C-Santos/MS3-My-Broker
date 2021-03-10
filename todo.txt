@@ -1,3 +1,4 @@
 [] Include floating button
 
+[] Change color for profit or loss
 
