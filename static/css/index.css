@@ -91,7 +91,12 @@ body {
 }
 
 .stock-quotes {
+    text-align: center;
     line-height: 32px;
+}
+
+.position_title {
+    text-align: center;
 }
 
 .buy-stock-btn:hover {
@@ -99,6 +104,18 @@ body {
     text-decoration: none;
 }
 
+.negative_wallet_profile {
+    font-size: 1.75rem;
+    color: red;
+    font-weight: 700 !important;
+    line-height: 1.2;
+}
+
+.negative_wallet_bar {
+    color: red;
+    font-weight: 700 !important;
+    line-height: 1.2;
+}
 .margin-top {
     margin-top: 20px;
 }

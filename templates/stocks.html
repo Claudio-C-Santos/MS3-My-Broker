@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block content%}
     <div class="row positions_title py-2">
-        <div class="col s2 "><b>Company</b></div>
-        <div class="col s2 "><b>Symbol</b></div>
-        <div class="col s2"><b>Open Price</b></div>
-        <div class="col s2"><b>High</b></div>
-        <div class="col s2"><b>Low</b></div>
-        <div class="col s2"><b>Closing Price</b></div>
-        <div class="col s2"></div>
+        <div class="col s2 position_title"><b>Company</b></div>
+        <div class="col s2 position_title"><b>Symbol</b></div>
+        <div class="col s2 position_title"><b>Open Price</b></div>
+        <div class="col s2 position_title"><b>High</b></div>
+        <div class="col s2 position_title"><b>Low</b></div>
+        <div class="col s2 position_title"><b>Closing Price</b></div>
+        <div class="col s4"></div>
     </div>
 
 
@@ -19,16 +19,16 @@
             AAPL
         </div>
         <div class="col s2 stock-quotes">
-            &#36 {{ stock_aapl[0][yesterday]['1. open']|float|round(2, 'floor')  }}
+            &#36 {{ stock_aapl[0][yesterday]['1. open']|float|round(3, 'floor')  }}
         </div>
         <div class="col s2 stock-quotes">
-            &#36 {{ stock_aapl[0][yesterday]['2. high']|float|round(2, 'floor') }}
+            &#36 {{ stock_aapl[0][yesterday]['2. high']|float|round(3, 'floor') }}
         </div>
         <div class="col s2 stock-quotes">
-            &#36 {{ stock_aapl[0][yesterday]['3. low']|float|round(2, 'floor')  }}
+            &#36 {{ stock_aapl[0][yesterday]['3. low']|float|round(3, 'floor')  }}
         </div>
         <div class="col s2 stock-quotes">
-            &#36 {{ stock_aapl[0][yesterday]['4. close']|float|round(2, 'floor')  }}
+            &#36 {{ stock_aapl[0][yesterday]['4. close']|float|round(3, 'floor')  }}
         </div>
         <div class="col s2">
             <a class="waves-effect waves-light btn-small green buy-stock-btn" href="{{ url_for('purchaseStocks') }}">Buy</a>

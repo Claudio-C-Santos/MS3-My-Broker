@@ -3,12 +3,12 @@
     <h3 class="left-align">Closed Positions</h3>
 
     <div class="row positions_title py-2">
-        <div class="col s2 "><b>Symbol</b></div>
-        <div class="col s2"><b>Selling Date</b></div>
-        <div class="col s2"><b>Stocks Sold</b></div>
-        <div class="col s2"><b>Purchase Price</b></div>
-        <div class="col s2"><b>Selling Price</b></div>
-        <div class="col s2"><b>Profit/Loss</b></div>
+        <div class="col s2 position_title"><b>Symbol</b></div>
+        <div class="col s2 position_title"><b>Selling Date</b></div>
+        <div class="col s2 position_title"><b>Stocks Sold</b></div>
+        <div class="col s2 position_title"><b>Purchase Price</b></div>
+        <div class="col s2 position_title"><b>Selling Price</b></div>
+        <div class="col s2 position_title"><b>Profit/Loss</b></div>
     </div>
 
     {% for transaction in closed_positions %}
@@ -30,7 +30,7 @@
                     {{ transaction.selling_price }}
                 </div>
                 <div class="col s2 stock-quotes">
-                    {{ transaction.money_amount|float|round(2, 'floor') }}
+                    {{ '{:,.2f}'.format( (transaction.selling_price|float - transaction.purchase_price|float) * transaction.stock_amount|int ) }}
                 </div>
             </div>
         {% endif %}
