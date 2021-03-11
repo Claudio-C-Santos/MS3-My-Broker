@@ -1,7 +1,5 @@
 [] Include floating button
 
-[] Change color for profit or loss
-
 [] Button to add more funds
 
 [] Improve app.py comments

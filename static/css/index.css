@@ -134,6 +134,18 @@ body {
     line-height: 1.2;
 }
 
+#funds_btn {
+    font-family: Merriweather; 
+    color: #36b9cc;
+    border: none;
+    background: none;
+
+}
+
+#funds_btn:hover {
+    text-decoration: underline;
+}
+
 /* ------------------------------------------------------------Top Nav Bar */
 
 .negative_bar {

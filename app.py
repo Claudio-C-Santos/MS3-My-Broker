@@ -10,13 +10,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date, datetime, timedelta
 if os.path.exists("env.py"):
     import env
-from common import yesterday
-from common import getUsername
-from common import wallet
-from common import transactions
-from common import transaction_lst
-from common import stringify_number
-from common import stock_aapl
+from common import yesterday, getUsername, wallet, transactions
+from common import transaction_lst, stringify_number, stock_aapl
 from common import profit_loss
 
 # instancing Flask
@@ -44,23 +39,6 @@ def index():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        # Retrieve all data from mongoDB's "transactions" entries
-        transactions = mongo.db.transactions.find()
-
-        # Object where each transaction is appended to from the for loop
-        transaction_lst = []
-
-        for items in transactions:
-            transaction_lst.append(items)
-
-        profit_loss_lst = []
-
-        for item in transaction_lst:
-            profit_loss_lst.append(
-                round(((float(stock_aapl[0][yesterday]['4. close']) -
-                float(item['purchase_price'])) *
-                int(item['stock_amount'])), 2))
-
         # check if username already exists
         existing_user = mongo.db.users.find_one(
                         {"username": request.form.get("username").lower()})
@@ -87,7 +65,7 @@ def register():
             username=session["user"],
             first_name=first_name,
             transactions=transactions,
-            transaction_lst=transaction_lst,
+            transaction_lst=transaction_lst(session),
             stock_aapl=stock_aapl,
             yesterday=yesterday,
             funds_available=stringify_number(wallet()),
@@ -339,6 +317,30 @@ def closedPositions():
                             funds_available=stringify_number(wallet()),
                             closed_positions=closed_positions,
                             profit_loss=stringify_number(profit_loss(session)))
+
+
+@app.route("/add_funds", methods=["GET", "POST"])
+def add_funds():
+    first_name = mongo.db.users.find_one(
+        {"username": session["user"]})["first_name"]
+
+    if request.method == "POST":
+        wallet_transaction = {
+            "money_amount": float(10000),
+            "created_by": session["user"]
+        }
+
+        mongo.db.wallet_transactions.insert_one(wallet_transaction)
+
+        return render_template(
+            "profile.html", username=getUsername(session),
+            first_name=first_name,
+            transactions=transactions,
+            transaction_lst=transaction_lst(session),
+            stock_aapl=stock_aapl,
+            yesterday=yesterday,
+            funds_available=stringify_number(wallet()),
+            profit_loss=stringify_number(profit_loss(session)))
 
 
 # Decorator to process logout request
