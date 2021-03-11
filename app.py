@@ -47,16 +47,21 @@ def register():
             flash("Username already exists")
             return redirect(url_for("register"))
 
+        # Form to be inserted into Mongo's database
+        # These are inputs in the register form
         register = {
             "first_name": request.form.get("first_name"),
             "last_name": request.form.get("last_name"),
             "username": request.form.get("username").lower(),
             "password": generate_password_hash(request.form.get("password"))
         }
+        # Inserts "register"
         mongo.db.users.insert_one(register)
 
+        # Variable created to pass in render_template to display on profile page
         session["user"] = request.form.get("username").lower()
 
+        # Variable created to pass in render_template to display on profile page
         first_name = mongo.db.users.find_one(
             {"username": session["user"]})["first_name"]
 
@@ -163,7 +168,12 @@ def purchaseStocks():
 @app.route('/purchase', methods=["GET", "POST"])
 def purchase():
     if request.method == "POST":
+
+        # The purchase will only go forward if the funds available (wallet())
+        # is higher that the total purchase amount
         if wallet() >= float(request.form.get("money_amount")):
+
+            # Data taken from the form
             purchase = {
                 "purchase_date": yesterday,
                 "ticker": request.form.get('ticker'),
@@ -175,7 +185,8 @@ def purchase():
 
             mongo.db.transactions.insert_one(purchase)
 
-            # Update funds available
+            # Data inserted into another database in order to have an
+            # updated amount of the funds available to the user
             wallet_transaction = {
                 "money_amount": -float(request.form.get("money_amount")),
                 "created_by": session["user"]
@@ -185,6 +196,9 @@ def purchase():
 
             flash("Purchase Successful")
             return redirect(url_for("stocks"))
+
+        # If the funds available are lower than the total purchase amount
+        # nothing will happen and a flash message will be displayed
         else:
             flash("Not enough funds")
             return redirect(url_for("stocks"))
@@ -210,10 +224,15 @@ def openPositions():
 @app.route("/sell/<position_id>", methods=["GET", "POST"])
 def sell(position_id):
     if request.method == "POST":
+
+        # If the user tries to sell less stock that the amount
+        # owned the databse has to be updated
         if int(request.form.get(
             "stock_amount_sell")) < int(request.form.get(
                 "stocks_owned")):
 
+            # This calculates the amount of stocks remaining to
+            # update Monog's database with "update"
             remaining_stock = int(
                 request.form.get("stocks_owned")) - int(
                     request.form.get("stock_amount_sell"))
@@ -230,7 +249,8 @@ def sell(position_id):
             mongo.db.transactions.update(
                 {"_id": ObjectId(position_id)}, update)
 
-            # Update funds available
+            # Data inserted into another database in order to have an
+            # updated amount of the funds available to the user 
             wallet_transaction = {
                 "money_amount": float(request.form.get("money_amount_sell")),
                 "created_by": session["user"]
@@ -238,14 +258,16 @@ def sell(position_id):
 
             mongo.db.wallet_transactions.insert_one(wallet_transaction)
 
-            funds_used_adj = float(item['money_amount']) - float(request.form.get("money_amount_sell"))
 
+            # funds_used_adj = float(item['money_amount']) - float(request.form.get("money_amount_sell"))
+
+            # The sold stocks are then store in closed_positions in order to have history
             sell = {
                 "selling_date": yesterday,
                 "ticker": request.form.get('ticker'),
                 "stock_amount": request.form.get("stock_amount_sell"),
                 "purchase_price": request.form.get("purchase_price_sell"),
-                "money_amount": str(funds_used_adj),
+                # "money_amount": str(funds_used_adj),
                 "selling_price": request.form.get("selling_price"),
                 "created_by": session["user"]
             }
@@ -254,6 +276,8 @@ def sell(position_id):
 
             return redirect(url_for('openPositions'))
 
+        # If the user wants to sell the same amount of stocks owned data
+        # has to be deleted from the database
         elif int(request.form.get(
             "stock_amount_sell")) == int(request.form.get(
                 "stocks_owned")):
@@ -261,6 +285,7 @@ def sell(position_id):
             mongo.db.transactions.remove(
                 {"_id": ObjectId(position_id)})
 
+            # The sold stocks are then store in closed_positions in order to have history
             sell = {
                 "selling_date": yesterday,
                 "ticker": request.form.get('ticker'),
@@ -274,7 +299,8 @@ def sell(position_id):
 
             mongo.db.closed_positions.insert_one(sell)
 
-            # Update funds available
+            # Data inserted into another database in order to have an
+            # updated amount of the funds available to the user 
             wallet_transaction = {
                 "money_amount": float(request.form.get("money_amount_sell")),
                 "created_by": session["user"]
@@ -284,6 +310,8 @@ def sell(position_id):
 
             return redirect(url_for('openPositions'))
 
+        # If the user wants to seel more stocks that the amount owned
+        # nothing will happen and a flash message will be displayed
         elif int(request.form.get(
             "stock_amount_sell")) > int(request.form.get(
                 "stocks_owned")):
@@ -319,12 +347,15 @@ def closedPositions():
                             profit_loss=stringify_number(profit_loss(session)))
 
 
+# Decorator used to add funds to the user's avialable funds
 @app.route("/add_funds", methods=["GET", "POST"])
 def add_funds():
     first_name = mongo.db.users.find_one(
         {"username": session["user"]})["first_name"]
 
     if request.method == "POST":
+        # When the user click on the button in the profile page an additional
+        # 10k will be added to the available funds
         wallet_transaction = {
             "money_amount": float(10000),
             "created_by": session["user"]
