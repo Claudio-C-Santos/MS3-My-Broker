@@ -120,17 +120,30 @@ body {
 
 /* ------------------------------------------------------------Profile Page  */
 
-.negative_wallet_profile {
+.negative_profile {
     font-size: 1.75rem;
     color: red;
     font-weight: 700 !important;
     line-height: 1.2;
 }
 
+.positive_profile {
+    font-size: 1.75rem;
+    color: green;
+    font-weight: 700 !important;
+    line-height: 1.2;
+}
+
 /* ------------------------------------------------------------Top Nav Bar */
 
-.negative_wallet_bar {
+.negative_bar {
     color: red;
+    font-weight: 700 !important;
+    line-height: 1.2;
+}
+
+.positive_bar {
+    color: green;
     font-weight: 700 !important;
     line-height: 1.2;
 }

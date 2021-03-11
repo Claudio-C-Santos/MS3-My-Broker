@@ -17,6 +17,7 @@ from common import transactions
 from common import transaction_lst
 from common import stringify_number
 from common import stock_aapl
+from common import profit_loss
 
 # instancing Flask
 app = Flask(__name__)
@@ -90,7 +91,7 @@ def register():
             stock_aapl=stock_aapl,
             yesterday=yesterday,
             funds_available=stringify_number(wallet()),
-            profit_loss_lst=profit_loss_lst)
+            profit_loss=stringify_number(profit_loss(session)))
 
     return render_template("register.html")
 
@@ -123,7 +124,8 @@ def login():
                         transaction_lst=transaction_lst(session),
                         stock_aapl=stock_aapl,
                         yesterday=yesterday,
-                        funds_available=stringify_number(wallet()))
+                        funds_available=stringify_number(wallet()),
+                        profit_loss=stringify_number(profit_loss(session)))
             else:
                 # if the password doesn't match
                 flash("Incorrect Username and/or Password")
@@ -139,24 +141,6 @@ def login():
 # Decorator to render the profile page and display all the info included
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
-    # Retrieve all data from mongoDB's "transactions" entries
-    transactions = mongo.db.transactions.find()
-
-    # Object where each transaction is appended to from the for loop
-    transaction_lst = []
-
-    for items in transactions:
-        transaction_lst.append(items)
-
-    profit_loss_lst = []
-
-    for item in transaction_lst:
-        profit_loss_lst.append(
-            round(((
-                float(stock_aapl[0][yesterday]['4. close']) -
-                float(item['purchase_price'])) *
-                int(item['stock_amount'])), 2))
-
     first_name = mongo.db.users.find_one(
         {"username": session["user"]})["first_name"]
 
@@ -165,10 +149,11 @@ def profile(username):
             "profile.html", username=getUsername(session),
             first_name=first_name,
             transactions=transactions,
-            transaction_lst=transaction_lst,
+            transaction_lst=transaction_lst(session),
             stock_aapl=stock_aapl,
             yesterday=yesterday,
-            funds_available=stringify_number(wallet()))
+            funds_available=stringify_number(wallet()),
+            profit_loss=stringify_number(profit_loss(session)))
 
     return render_template("login")
 
@@ -180,7 +165,8 @@ def stocks():
                             username=getUsername(session),
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
-                            funds_available=stringify_number(wallet()))
+                            funds_available=stringify_number(wallet()),
+                            profit_loss=stringify_number(profit_loss(session)))
 
 
 # Decorator used to render the page where the user can purchase stocks
@@ -190,7 +176,8 @@ def purchaseStocks():
                             username=getUsername(session),
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
-                            funds_available=stringify_number(wallet()))
+                            funds_available=stringify_number(wallet()),
+                            profit_loss=stringify_number(profit_loss(session)))
 
 
 # Decorator used to process the purchase submitted by the user
@@ -234,7 +221,8 @@ def openPositions():
                             transaction_lst=transaction_lst(session),
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
-                            funds_available=stringify_number(wallet()))
+                            funds_available=stringify_number(wallet()),
+                            profit_loss=stringify_number(profit_loss(session)))
 
 
 # Decorator used to process the sell submitted by the user
@@ -253,7 +241,7 @@ def sell(position_id):
                     request.form.get("stock_amount_sell"))
 
             update = {
-                "selling_date": yesterday,
+                "purchase_date": yesterday,
                 "ticker": request.form.get('ticker'),
                 "stock_amount": str(remaining_stock),
                 "purchase_price": request.form.get("purchase_price_sell"),
@@ -272,30 +260,12 @@ def sell(position_id):
 
             mongo.db.wallet_transactions.insert_one(wallet_transaction)
 
-            # Retrieve all data from mongoDB's "transactions" entries
-            transactions = mongo.db.transactions.find()
-
-            # Object where each transaction is appended to from the for loop
-            transaction_lst = []
-
-            for items in transactions:
-                transaction_lst.append(items)
-
-            profit_loss_lst = []
-
-            for item in transaction_lst:
-                profit_loss_lst.append(
-                    round(((
-                        float(stock_aapl[0][yesterday]['4. close']) -
-                        float(item['purchase_price'])) *
-                        int(item['stock_amount'])), 2))
-
             funds_used_adj = float(item['money_amount']) - float(request.form.get("money_amount_sell"))
 
             sell = {
                 "selling_date": yesterday,
                 "ticker": request.form.get('ticker'),
-                "stock_amount": str(remaining_stock),
+                "stock_amount": request.form.get("stock_amount_sell"),
                 "purchase_price": request.form.get("purchase_price_sell"),
                 "money_amount": str(funds_used_adj),
                 "selling_price": request.form.get("selling_price"),
@@ -349,7 +319,8 @@ def sell(position_id):
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
                             funds_available=stringify_number(wallet()),
-                            open_position=open_position)
+                            open_position=open_position,
+                            profit_loss=stringify_number(profit_loss(session)))
 
 
 # Decorator used to render a list of closed positions
@@ -366,7 +337,8 @@ def closedPositions():
                             stock_aapl=stock_aapl,
                             yesterday=yesterday,
                             funds_available=stringify_number(wallet()),
-                            closed_positions=closed_positions)
+                            closed_positions=closed_positions,
+                            profit_loss=stringify_number(profit_loss(session)))
 
 
 # Decorator to process logout request

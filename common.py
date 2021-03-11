@@ -64,6 +64,7 @@ def wallet():
 
     return funds
 
+
 # Function used to transform numbers into string and add the thousand's comma
 def stringify_number(el):
     funds_available = format(round(el, 2), ",")
@@ -87,7 +88,22 @@ def transaction_lst(session):
     transaction_lst = []
 
     for items in transactions:
-        transaction_lst.append(items)
+        if session['user'] == items['created_by']:
+            transaction_lst.append(items)
+
+    return transaction_lst
+
+
+def profit_loss(session):
+    # Retrieve all data from mongoDB's "transactions" entries
+    transactions = mongo.db.transactions.find()
+
+    # Object where each transaction is appended to from the for loop
+    transaction_lst = []
+
+    for items in transactions:
+        if session['user'] == items['created_by']:
+            transaction_lst.append(items)
 
     profit_loss_lst = []
 
@@ -98,4 +114,4 @@ def transaction_lst(session):
                 float(item['purchase_price'])) *
                 int(item['stock_amount'])), 2))
 
-    return transaction_lst
+    return sum(profit_loss_lst)

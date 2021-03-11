@@ -33,7 +33,7 @@
                             <div class="col mr-2">
                                 <div class="text-m font-weight-bold text-info text-uppercase mb-1">Profit/Loss</div>
                                 <div class="h3 mb-0 font-weight-bold text-gray-800" id="profit_loss_profile">
-                                    {{ profit_loss_lst|sum|round(2, 'floor') }}
+                                    {{ profit_loss }}
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -47,12 +47,12 @@
 
         <!-- Titles for list of open positions -->
         <div class="row positions_title py-2">
-            <div class="col s2 "><b>Symbol</b></div>
-            <div class="col s2"><b>Purchase Date</b></div>
-            <div class="col s2"><b>Unit Price</b></div>
-            <div class="col s2"><b>Amount of Stocks</b></div>
-            <div class="col s2"><b>Funds Used</b></div>
-            <div class="col s2"><b>Profit/Loss</b></div>
+            <div class="col s2 position_title"><b>Symbol</b></div>
+            <div class="col s2 position_title"><b>Purchase Date</b></div>
+            <div class="col s2 position_title"><b>Unit Price</b></div>
+            <div class="col s2 position_title"><b>Amount of Stocks</b></div>
+            <div class="col s2 position_title"><b>Funds Used</b></div>
+            <div class="col s2 position_title"><b>Profit/Loss</b></div>
         </div>
 
         <!-- for loop over the transactions on MongoDB's database in order to display them on the page-->
