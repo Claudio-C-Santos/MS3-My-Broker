@@ -6,10 +6,10 @@
         <!-- Titles for list of open positions -->
         <div class="row positions_title py-2">
             <div class="col s2 position_title"><b>Symbol</b></div>
-            <div class="col s2 position_title"><b>Purchase Date</b></div>
+            <div class="col s2 position_title none-small"><b>Purchase Date</b></div>
             <div class="col s2 position_title"><b>Unit Price</b></div>
-            <div class="col s2 position_title"><b>Amount of Stocks</b></div>
-            <div class="col s2 position_title"><b>Funds Used</b></div>
+            <div class="col s2 position_title none-small"><b>Amount of Stocks</b></div>
+            <div class="col s2 position_title none-small"><b>Funds Used</b></div>
             <div class="col s2 position_title"><b>Profit/Loss</b></div>
             <div class="col s4"></div>
         </div>
@@ -23,24 +23,24 @@
                         {{ transaction.ticker }}
                     </div>
                     <!-- Purchase Date -->
-                    <div class="col s2 stock-quotes">
+                    <div class="col s2 stock-quotes none-small">
                         {{ transaction.purchase_date }}
                     </div>
                     <!-- Purchase Price -->
-                    <div class="col s2 stock-quotes">
-                        {{ transaction.purchase_price }}
+                    <div class="col s2 stock-quotes none-xs">
+                        &#36 {{ transaction.purchase_price }}
                     </div>
                     <!-- Amount of Stock owned -->
-                    <div class="col s2 stock-quotes">
+                    <div class="col s2 stock-quotes none-small">
                         {{ transaction.stock_amount }}
                     </div>
                     <!-- Total Purchase Price -->
-                    <div class="col s2 stock-quotes">
-                        {{ '{:,.2f}'.format((transaction.stock_amount|float * transaction.purchase_price|float)|round(2, 'floor')) }}
+                    <div class="col s2 stock-quotes none-small">
+                        &#36 {{ '{:,.2f}'.format((transaction.stock_amount|float * transaction.purchase_price|float)|round(2, 'floor')) }}
                     </div>
                     <!-- Profit/Loss Amount -->
                     <div class="col s2 stock-quotes">
-                        {{ ((stock_aapl[0][yesterday]['4. close']|float - transaction.purchase_price|float) * transaction.stock_amount|int)|float|round(2, 'floor') }}
+                        &#36 {{ ((stock_aapl[0][yesterday]['4. close']|float - transaction.purchase_price|float) * transaction.stock_amount|int)|float|round(2, 'floor') }}
                     </div>
                     <!-- Sell Button -->
                     <div class="col s1 stock-quotes">

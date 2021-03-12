@@ -3,11 +3,11 @@
 
         <!-- Titles for list of closed positions -->
         <div class="row positions_title py-2">
-            <div class="col s2 position_title"><b>Company</b></div>
+            <div class="col s2 position_title none-small"><b>Company</b></div>
             <div class="col s2 position_title"><b>Symbol</b></div>
             <div class="col s2 position_title"><b>Open Price</b></div>
-            <div class="col s2 position_title"><b>High</b></div>
-            <div class="col s2 position_title"><b>Low</b></div>
+            <div class="col s2 position_title none-small"><b>High</b></div>
+            <div class="col s2 position_title none-small"><b>Low</b></div>
             <div class="col s2 position_title"><b>Closing Price</b></div>
             <div class="col s4"></div>
         </div>
@@ -16,7 +16,7 @@
         <div class="row shadow py-2">
 
             <!-- Stock's Name -->
-            <div class="col s2 stock-quotes">
+            <div class="col s2 stock-quotes none-small">
                 <b>Apple Inc</b>
             </div>
 
@@ -31,12 +31,12 @@
             </div>
 
             <!-- Stock's Highest Price Reached -->
-            <div class="col s2 stock-quotes">
+            <div class="col s2 stock-quotes none-small">
                 &#36 {{ stock_aapl[0][yesterday]['2. high']|float|round(3, 'floor') }}
             </div>
 
             <!-- Stock's Lowest Price Reached -->
-            <div class="col s2 stock-quotes">
+            <div class="col s2 stock-quotes none-small">
                 &#36 {{ stock_aapl[0][yesterday]['3. low']|float|round(3, 'floor')  }}
             </div>
 

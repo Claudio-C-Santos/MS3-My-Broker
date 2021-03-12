@@ -6,8 +6,8 @@
         <!-- Titles for list of closed positions -->
         <div class="row positions_title py-2">
             <div class="col s2 position_title"><b>Symbol</b></div>
-            <div class="col s2 position_title"><b>Selling Date</b></div>
-            <div class="col s2 position_title"><b>Stocks Sold</b></div>
+            <div class="col s2 position_title none-small"><b>Selling Date</b></div>
+            <div class="col s2 position_title none-small"><b>Stocks Sold</b></div>
             <div class="col s2 position_title"><b>Purchase Price</b></div>
             <div class="col s2 position_title"><b>Selling Price</b></div>
             <div class="col s2 position_title"><b>Profit/Loss</b></div>
@@ -22,24 +22,24 @@
                         {{ transaction.ticker }}
                     </div>
                     <!-- Selling Date -->
-                    <div class="col s2 stock-quotes">
+                    <div class="col s2 stock-quotes none-small">
                         {{ transaction.selling_date }}
                     </div>
                     <!-- Amount of stocks sold -->
-                    <div class="col s2 stock-quotes">
+                    <div class="col s2 stock-quotes none-small">
                         {{ transaction.stock_amount }}
                     </div>
                     <!-- Purchase Price -->
                     <div class="col s2 stock-quotes">
-                        {{ transaction.purchase_price }}
+                        &#36 {{ transaction.purchase_price }}
                     </div>
                     <!-- Selling Price -->
                     <div class="col s2 stock-quotes">
-                        {{ transaction.selling_price }}
+                        &#36 {{ transaction.selling_price }}
                     </div>
                     <!-- Amount of Profit/Loss -->
                     <div class="col s2 stock-quotes">
-                        {{ '{:,.2f}'.format( (transaction.selling_price|float - transaction.purchase_price|float) * transaction.stock_amount|int ) }}
+                        &#36 {{ '{:,.2f}'.format( (transaction.selling_price|float - transaction.purchase_price|float) * transaction.stock_amount|int ) }}
                     </div>
                 </div>
             {% endif %}

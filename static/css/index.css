@@ -167,21 +167,150 @@ body {
 
 /* ------------------------------------------------------------MEDIA QUERIES */
 
-@media screen and (min-width: 425px) and (max-width: 1025px){
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+#registration-form {
+    margin: auto;
+    width: 75%;
+}
+
+.stock-quotes,
+.position_title {
+    font-size: 0.75rem;
+}
+
+}
+
+@media screen and (min-width: 425px) and (max-width: 767px){
 
 #registration-form {
     margin-left: 50px;
     margin-right: 50px;
 }
 
+.sm-view span {
+    display: none;
 }
 
-@media screen and (min-width: 0px) and (max-width: 424px){
+#introBox {
+    margin: 40px 20px;
+}
+
+.none-small {
+    display: none;
+}
+
+.md-funds-bar {
+    width: 140px;
+}
+
+.stock-quotes,
+.position_title {
+    font-size: 0.75rem;
+}
+
+.only-small {
+    display: none;
+}
+
+.container {
+    padding: 0;
+    margin: 0;
+}
+
+.input {
+    padding: 0;
+}
+
+}
+
+@media screen and (min-width: 376px) and (max-width: 424px){
 
 #registration-form {
     margin-left: 5px;
     margin-right: 5px;
 }
 
+.sm-view span {
+    display: none;
+}
+
+#logout_btn,
+#logout_btn > span {
+    width: 80px;
+}
+
+.none-small {
+    display: none;
+}
+
+#introBox {
+    margin: 40px 20px;
+}
+
+.stock-quotes,
+.position_title {
+    font-size: 0.75rem;
+}
+
+.container {
+    padding: 0;
+    margin: 0;
+}
+
+.input {
+    padding: 0;
+}
+}
+
+@media screen and (min-width: 0px) and (max-width: 375px){
+
+#registration-form {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.sm-view span {
+    display: none;
+}
+
+#logout_btn,
+#logout_btn > span {
+    width: 80px;
+}
+
+.none-small {
+    display: none;
+}
+
+.none-xs {
+    display: none;
+}
+
+#introBox {
+    margin: 40px 20px;
+}
+
+.stock-quotes,
+.position_title {
+    font-size: 0.75rem;
+}
+
+.buy-stock-btn {
+    padding: 0 !important;
+    width: 45px;
+}
+
+.container {
+    padding: 0;
+    margin: 0;
+}
+
+.input {
+    padding: 0;
+}
+
+.custom-btn {
+    padding: 0;
+}
 
 }

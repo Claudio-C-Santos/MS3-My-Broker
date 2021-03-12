@@ -13,9 +13,10 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-m font-weight-bold text-info text-uppercase mb-1">Available Funds</div>
-                                <div class="h3 mb-0 font-weight-bold text-gray-800" id="funds_available_profile">
-                                    {{ funds_available }}
-                                </div>
+                                    <span class="h3 mb-0 font-weight-bold text-gray-800">&#36 </span>
+                                    <span class="h3 mb-0 font-weight-bold text-gray-800" id="funds_available_profile">
+                                        {{ funds_available }}
+                                    </span>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-wallet fa-2x text-gray-300"></i>
@@ -37,8 +38,11 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-m font-weight-bold text-info text-uppercase mb-1">Profit/Loss</div>
-                                <div class="h3 mb-0 font-weight-bold text-gray-800" id="profit_loss_profile">
-                                    {{ profit_loss }}
+                                <div class="h3 mb-0 font-weight-bold text-gray-800">
+                                    <span class="h3 mb-0 font-weight-bold text-gray-800">&#36 </span>
+                                    <span class="h3 mb-0 font-weight-bold text-gray-800" id="profit_loss_profile"> 
+                                        {{ profit_loss }}
+                                    </span>
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -51,7 +55,7 @@
         </div>
 
         <!-- Titles for list of open positions -->
-        <div class="row positions_title py-2">
+        <div class="row positions_title py-2 none-small">
             <div class="col s2 position_title"><b>Symbol</b></div>
             <div class="col s2 position_title"><b>Purchase Date</b></div>
             <div class="col s2 position_title"><b>Unit Price</b></div>
@@ -63,7 +67,7 @@
         <!-- for loop over the transactions on MongoDB's database in order to display them on the page-->
         {% for transaction in transaction_lst %}
             {% if session.user|lower == transaction.created_by|lower %}
-                <div class="row shadow py-2">
+                <div class="row shadow py-2 none-small">
                     <div class="col s2 stock-quotes">
                         {{ transaction.ticker }}
                     </div>
@@ -71,16 +75,16 @@
                         {{ transaction.purchase_date }}
                     </div>
                     <div class="col s2 stock-quotes">
-                        {{ transaction.purchase_price }}
+                        &#36 {{ transaction.purchase_price }}
                     </div>
                     <div class="col s2 stock-quotes">
                         {{ transaction.stock_amount }}
                     </div>
                     <div class="col s2 stock-quotes">
-                        {{ '{:,.2f}'.format((transaction.stock_amount|float * transaction.purchase_price|float)|round(3, 'floor')) }}
+                        &#36 {{ '{:,.2f}'.format((transaction.stock_amount|float * transaction.purchase_price|float)|round(3, 'floor')) }}
                     </div>
                     <div class="col s2 stock-quotes">
-                        {{ ((stock_aapl[0][yesterday]['4. close']|float - transaction.purchase_price|float) * transaction.stock_amount|int)|float|round(2, 'floor') }}
+                        &#36 {{ ((stock_aapl[0][yesterday]['4. close']|float - transaction.purchase_price|float) * transaction.stock_amount|int)|float|round(2, 'floor') }}
                     </div>
                 </div>
             {% endif %}

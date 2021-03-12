@@ -5,11 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
         integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-        type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <title>My Broker</title>
 </head>
 
@@ -84,16 +83,16 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto" >
 
                         <!-- Divider -->
-                        <div class="topbar-divider d-none d-sm-block"></div>
+                        <div class="topbar-divider d-none d-sm-block md-funds-bar"></div>
 
                         <!-- Funds Available Display -->
-                        <li class="nav-item no-arrow">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 medium font-weight-bold">Funds
-                                Available:</span>
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 medium font-weight-bold"  id="funds_available_bar">
+                        <li class="nav-item no-arrow sm-view">
+                            <span class="mr-2 d-lg-inline text-gray-600 medium font-weight-bold">Funds Available:</span>
+                            <span class="mr-2 d-lg-inline text-gray-600 medium font-weight-bold">&#36</span>
+                            <span class="mr-2 d-lg-inline text-gray-600 medium font-weight-bold"  id="funds_available_bar">
                                 {{ funds_available }}
                             </span>
                         </li>
@@ -102,10 +101,10 @@
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Profit/Loss Display -->
-                        <li class="nav-item no-arrow">
-                            <span
-                                class="mr-2 d-none d-lg-inline text-gray-600 medium font-weight-bold">Profit/Loss:</span>
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 medium font-weight-bold" id="profit_loss_bar">
+                        <li class="nav-item no-arrow sm-view">
+                            <span class="mr-2 d-lg-inline text-gray-600 medium font-weight-bold">Profit/Loss:</span>
+                            <span class="mr-2 d-lg-inline text-gray-600 medium font-weight-bold" >&#36</span>
+                            <span class="mr-2 d-lg-inline text-gray-600 medium font-weight-bold" id="profit_loss_bar">
                                 {{ profit_loss }}
                             </span>
                         </li>
@@ -115,8 +114,8 @@
 
                         <!--Logout Button-->
                         <li class="nav-item no-arrow">
-                            <a class="nav-link" href="{{ url_for('logout') }}">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Log Out</span>
+                            <a class="nav-link" href="{{ url_for('logout') }}" id="logout_btn">
+                                <span class="mr-2 d-lg-inline text-gray-600 center">Log Out</span>
                             </a>
                         </li>
 
@@ -153,6 +152,7 @@
     <script src="{{ url_for('static', filename='js/selling-price-calculator.js') }}"></script>
     <script src="{{ url_for('static', filename='js/profile-coloring.js') }}"></script>
     <script src="{{ url_for('static', filename='js/top-bar-coloring.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/small-screen.js') }}"></script>
 </body>
 
 </html>

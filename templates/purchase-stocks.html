@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div id="row">
+    <div id="row ">
         <div class="col s12 m5">
             <!-- Purchase Stock Card -->
             <div class="card-panel">
@@ -29,7 +29,7 @@
 
                             <!-- Purchase Price Readonly -->
                             <div class="col s6">
-                                <label class="center_label" for="purchase_price">Purchase Price</label>
+                                <label class="center_label" for="purchase_price">Price</label>
                                 <input readonly id="purchase_price" name="purchase_price"
                                     value="{{ stock_aapl[0][yesterday]['4. close']|float|round(3, 'floor')  }}"
                                     type="number" class="validate disabled">
@@ -38,17 +38,16 @@
 
                         <!-- Amount of stocks to purchase input -->
                         <div class="container">
-                            <div class="col s1 offset-s2">
+                            <div class="col s1 offset-s2 input">
                                 <label class="center_label" for="stock_amount">Amount</label>
-                                <input placeholder="Insert stock amount" id="stock_amount" name="stock_amount" type="number"
-                                    class="validate" required>
+                                <input placeholder="Insert Amount" id="stock_amount" name="stock_amount" type="number" class="validate" required>
                             </div>
                         </div>
 
                         <!-- Necessary funds fiel which is automatically filled by JS code on script -->
                             <!-- JS code can be found on static/js/script-1.js -->
-                        <div class="container">
-                            <div class="col s1 offset-s2">
+                        <div class="container purchase-amounts">
+                            <div class="col s1 offset-s2 input">
                                 <label class="center_label" for="money_amount">Necessary Funds</label>
                                 <input readonly id="money_amount" name="money_amount" type="number" class="disabled">
                             </div>
@@ -56,8 +55,10 @@
 
                         <!-- Finalize Button -->
                         <div class="center-align">
-                            <button class="waves-effect waves-light btn-large custom-btn green" type="submit"><i
-                                    class="fas fa-shopping-cart right"></i>Finalize</button>
+                            <button class="waves-effect waves-light btn-large custom-btn green" type="submit">
+                                <i class="fas fa-shopping-cart right none-small"></i>
+                                Finalize
+                            </button>
                         </div>
                     </form>
                 </div>
