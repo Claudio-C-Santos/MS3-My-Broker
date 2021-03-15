@@ -72,7 +72,23 @@ This appliacation was built with the goal of simplifying the process of investin
 
 The palette of colors chosen was based on solely personal taste.
 
-### Existing Features
+## Database Architecture
+
+### Schema
+
+The database is divided into 4 collections:
+- user
+- transactions
+- closed_positions
+- wallet_transactions
+
+"Users" collections is where the first and last names along with username and salted password are stored.
+In the "transaction" collection there's all the purchased stocks, in other words, the open positions. The user has access to this data on the profile page and on the "Open Positions" page. 
+Data is created into this collections when the user buys stocks, it is updated when the user sells less stocks than the amount owned and is deleted when the user sells the total amoun of stocks owned.
+Whenever the user sells stocks, regardless of the amount, a new entry is created in collection "closed_positions" to store history. This way the user can access previous actions.
+Finally, every purchase or selling creates an entry on collection "wallet_transaction" so that the total available funds can be calculated and displayed at any time.
+
+## Existing Features
 
 <ins>Feature 1</ins><br>
 - As a aspiring investor, I want to buy stocks, in order to test my investment and analytical skills.

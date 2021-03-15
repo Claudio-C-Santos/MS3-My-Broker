@@ -1,3 +1,0 @@
-[] Improve app.py comments
-
-[] Check if lines 260 and 267 can be deleted from app.py
