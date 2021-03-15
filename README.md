@@ -62,7 +62,7 @@ This appliacation was built with the goal of simplifying the process of investin
 
 * Purchase Stocks
 
-<img src="static/img/wireframes/purchase.png" alt="Purchase Page Wireframe">
+<img src="static/img/wireframes/purchases.png" alt="Purchase Page Wireframe">
 
 * Selling Stocks
 
@@ -87,6 +87,10 @@ In the "transaction" collection there's all the purchased stocks, in other words
 Data is created into this collections when the user buys stocks, it is updated when the user sells less stocks than the amount owned and is deleted when the user sells the total amoun of stocks owned.
 Whenever the user sells stocks, regardless of the amount, a new entry is created in collection "closed_positions" to store history. This way the user can access previous actions.
 Finally, every purchase or selling creates an entry on collection "wallet_transaction" so that the total available funds can be calculated and displayed at any time.
+
+Bellow is the graphical representation of my database schema:
+
+<img src="static/img/schema/data_schema.jpg" alt="Database Schema">
 
 ## Existing Features
 
