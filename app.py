@@ -58,10 +58,12 @@ def register():
         # Inserts "register"
         mongo.db.users.insert_one(register)
 
-        # Variable created to pass in render_template to display on profile page
+        # Variable created to pass in render_template to
+        # display on profile page
         session["user"] = request.form.get("username").lower()
 
-        # Variable created to pass in render_template to display on profile page
+        # Variable created to pass in render_template
+        # to display on profile page
         first_name = mongo.db.users.find_one(
             {"username": session["user"]})["first_name"]
 
@@ -92,15 +94,15 @@ def login():
         if existing_user:
             # confirm password
             if check_password_hash(
-                existing_user["password"], request.form.get("password")):
-                    session["user"] = request.form.get("username").lower()
+            existing_user["password"], request.form.get("password")):
+            session["user"] = request.form.get("username").lower()
                     first_name = mongo.db.users.find_one(
                         {"username": session["user"]})["first_name"]
                     # return template with username,
                     # first_name, transactions and stock
                     # The last two are from API.
                     return render_template(
-                        "profile.html", 
+                        "profile.html",
                         username=session["user"],
                         first_name=first_name,
                         transactions=transactions(),
@@ -250,7 +252,7 @@ def sell(position_id):
                 {"_id": ObjectId(position_id)}, update)
 
             # Data inserted into another database in order to have an
-            # updated amount of the funds available to the user 
+            # updated amount of the funds available to the user
             wallet_transaction = {
                 "money_amount": float(request.form.get("money_amount_sell")),
                 "created_by": session["user"]
@@ -258,16 +260,13 @@ def sell(position_id):
 
             mongo.db.wallet_transactions.insert_one(wallet_transaction)
 
-
-            # funds_used_adj = float(item['money_amount']) - float(request.form.get("money_amount_sell"))
-
-            # The sold stocks are then store in closed_positions in order to have history
+            # The sold stocks are then store in closed_positions
+            # in order to have history
             sell = {
                 "selling_date": yesterday,
                 "ticker": request.form.get('ticker'),
                 "stock_amount": request.form.get("stock_amount_sell"),
                 "purchase_price": request.form.get("purchase_price_sell"),
-                # "money_amount": str(funds_used_adj),
                 "selling_price": request.form.get("selling_price"),
                 "created_by": session["user"]
             }
@@ -285,7 +284,8 @@ def sell(position_id):
             mongo.db.transactions.remove(
                 {"_id": ObjectId(position_id)})
 
-            # The sold stocks are then store in closed_positions in order to have history
+            # The sold stocks are then store in closed_positions
+            # in order to have history
             sell = {
                 "selling_date": yesterday,
                 "ticker": request.form.get('ticker'),
@@ -300,7 +300,7 @@ def sell(position_id):
             mongo.db.closed_positions.insert_one(sell)
 
             # Data inserted into another database in order to have an
-            # updated amount of the funds available to the user 
+            # updated amount of the funds available to the user
             wallet_transaction = {
                 "money_amount": float(request.form.get("money_amount_sell")),
                 "created_by": session["user"]
@@ -383,7 +383,7 @@ def logout():
     return redirect(url_for("login"))
 
 
-if __name__ ==   "__main__":
+if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
             debug=True)

@@ -1,45 +1,202 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# My Broker
 
-Welcome Claudio-C-Santos,
+"My broker" is a broker created for educational purposes only, where the user can practice its investment and analytical skills 
+by purchasing and selling stocks without having to use real money. This broker only gives the option of purchase or selling the stocks, any analysis has to be done on another application.
 
-This is the Code Institute student template for Gitpod. We have preinstalled all of the tools you need to get started. You can safely delete this README.md file, or change it for your own project. Please do read it at least once, though! It contains some important information about Gitpod and the extensions we use.
+When the user registers an account, $10,000 becomes available to buy stocks. Once the stocks are bought they will be displayed on its profile
+and on the "Open Positions" page. The profile page displays an overview of the account with the funds available, the current profit or loss amount coming from the open positions which are also displayed on this page.
+When it's time to sell, the user can sell the total amount of stock owned or just part of it. 
+The stocks sold are then displayed on the "Closed Position" page with the relevant details. If a bad investment is done and the user runs out of available funds
+there's an option to top up the account with an extra $10,000.
 
-## Gitpod Reminders
+The market prices are provided by an API however due to limitation of their free service, only one stock is available. Besides this, the prices available have a delay of one day, in other words, today the user will be buying 
+Apple stock for yesterday's closing price. If the user is operating on Monday, the application will work on Friday's prices.
 
-To run a frontend (HTML, CSS, Javascript only) application in Gitpod, in the terminal, type:
+A live demo of website can be found [here](https://my-broker.herokuapp.com/).
 
-`python3 -m http.server`
+## UX
 
-A blue button should appear to click: *Make Public*,
+The main users of this application will be people who want to test their investment and analytical without the risk of using their own money for it. 
 
-Another blue button should appear to click: *Open Browser*.
+The navigation is very user friendly, starting with an index page where a brief explanation is given and two buttons are displayed, one to register and another one to log in.
 
-To run a backend Python file, type `python3 app.py`, if your Python file is named `app.py` of course.
+<img src="static/img/screenshots/index.jpg" alt="Index Screenshot">
 
-A blue button should appear to click: *Make Public*,
+Once the registration or log in is done, the user is redirected to his profile page where an overview of his account is displayed. On the left side there's a navigation bar with links to
+the dashboard, or profile page, open positions, closed positions and the stocks available on the market.
 
-Another blue button should appear to click: *Open Browser*.
+### User Stories
 
-In Gitpod you have superuser security privileges by default. Therefore you do not need to use the `sudo` (superuser do) command in the bash terminal in any of the lessons.
+- As a aspiring investor, I want to buy stocks, in order to test my investment and analytical skills.
+- As a aspiring investor, I want to sell stocks, in order to test my investment and analytical skills, avoid more loss and take the profits.
+- As a aspiring investor, I want to be able to sell all my stocks owned, avoid more loss and take the profits.
+- As a aspiring investor, I want to be able to sell part of the stocks owned, to take some of the available profit but keep some of the stocks.
+- As a aspiring investor, I want to have access to all my current owned stocks, or open positions, in order to decide on what to do with them.
+- As a aspiring investor, I want to have access to all sold stocks, or closed positions, in order to see my history.
+- As a aspiring investor, I want to have access to the stocks available in the market with their opening, highest, lowest and closing prices, in order to make a informed decision on my investment.
+- As a aspiring investor, I want to see how much funds I have available, in order to make a informed decision on my investment.
 
-## Updates Since The Instructional Video
+### Strategy
 
-We continually tweak and adjust this template to help give you the best experience. Here is the version history:
+The goal of this project is to give the user a as real as possible experience of what making these type of investments are all about. Recent events attracted a lot of people, including minors, to invest in stocks
+using any of the available platforms online without taking into consideration the possible outcomes of a bad investment. People shouldn't be affraid of making investments, they are good for the economy, but 
+more financial education should be given to everyone before starting. This application is a good start for beginners that want to take steps into the trading and investment world.
 
-**October 21 2020:** Versions of the HTMLHint, Prettier, Bootstrap4 CDN and Auto Close extensions updated. The Python extension needs to stay the same version for now.
+### Scope
 
-**October 08 2020:** Additional large Gitpod files (`core.mongo*` and `core.python*`) are now hidden in the Explorer, and have been added to the `.gitignore` by default.
+This appliacation was built with the goal of simplifying the process of investing on stocks to give a beginner investor and oportunity to practice risk free.
 
-**September 22 2020:** Gitpod occasionally creates large `core.Microsoft` files. These are now hidden in the Explorer. A `.gitignore` file has been created to make sure these files will not be committed, along with other common files.
+### Wireframes
 
-**April 16 2020:** The template now automatically installs MySQL instead of relying on the Gitpod MySQL image. The message about a Python linter not being installed has been dealt with, and the set-up files are now hidden in the Gitpod file explorer.
+* Home
 
-**April 13 2020:** Added the _Prettier_ code beautifier extension instead of the code formatter built-in to Gitpod.
+<img src="static/img/wireframes/Home.png" alt="Home Wireframe">
 
-**February 2020:** The initialisation files now _do not_ auto-delete. They will remain in your project. You can safely ignore them. They just make sure that your workspace is configured correctly each time you open it. It will also prevent the Gitpod configuration popup from appearing.
+* Profile
 
-**December 2019:** Added Eventyret's Bootstrap 4 extension. Type `!bscdn` in a HTML file to add the Bootstrap boilerplate. Check out the <a href="https://github.com/Eventyret/vscode-bcdn" target="_blank">README.md file at the official repo</a> for more options.
+<img src="static/img/wireframes/profile.png" alt="Profile Wireframe">
 
---------
+* Open/Closed Positions
 
-Happy coding!
+<img src="static/img/wireframes/positions.png" alt="Open/closed Positions Wireframe">
+
+* Purchase Stocks
+
+<img src="static/img/wireframes/purchase.png" alt="Purchase Page Wireframe">
+
+* Selling Stocks
+
+<img src="static/img/wireframes/selling.png" alt="Selling Page Wireframe">
+
+### Surface
+
+The palette of colors chosen was based on solely personal taste.
+
+### Existing Features
+
+<ins>Feature 1</ins><br>
+- As a aspiring investor, I want to buy stocks, in order to test my investment and analytical skills.
+
+<img src="static/img/screenshots/purchase_page.jpg" alt="Purchase Page Screenshot">
+
+<ins>Feature 2</ins><br>
+- As a aspiring investor, I want to sell stocks, in order to test my investment and analytical skills, avoid more loss and take the profits.
+- As a aspiring investor, I want to be able to sell all my stocks owned, avoid more loss and take the profits.
+- As a aspiring investor, I want to be able to sell part of the stocks owned, to take some of the available profit but keep some of the stocks.
+
+In this menu the user can insert the amount of stocks to be sold. 
+
+<img src="static/img/screenshots/sell.jpg" alt="Sell Page Screenshot">
+
+<ins>Feature 3</ins><br>
+- As a aspiring investor, I want to have access to all my current owned stocks, or open positions, in order to decide on what to do with them.
+
+<img src="static/img/screenshots/open-positions.jpg" alt="Open Position Page Screenshot">
+
+<ins>Feature 4</ins><br>
+- As a aspiring investor, I want to have access to all sold stocks, or closed positions, in order to see my history.
+
+<img src="static/img/screenshots/closed-positions.jpg" alt="Closed Position Page Screenshot">
+
+<ins>Feature 5</ins><br>
+- As a aspiring investor, I want to have access to the stocks available in the market with their opening, highest, lowest and closing prices, in order to make a informed decision on my investment.
+
+<img src="static/img/screenshots/market.jpg" alt="Market Page Screenshot">
+
+<ins>Feature 6</ins><br>
+- As a aspiring investor, I want to see how much funds I have available, in order to make a informed decision on my investment.
+
+<img src="static/img/screenshots/funds.jpg" alt="Available Funds Screenshot">
+
+### Features Left to Implement
+
+Would like to have more stocks available but that is dependent on a paid subscription on Alpoha Advantage API.
+Features that aloow the user to make a basic technical analysis on the stock with a graph and some indicators.
+Features that aloow the user to make a basic fundamental analysis on the stock with relevant news on the stock.
+
+# Technologies Used
+
+- Programming Languages
+    - HTML
+    - CSS
+    - JavaScript
+    - Python
+- [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+    - Jinja toolkit
+    - Werkzeug toolkit
+- [PyMongo](https://fontawesome.com/)
+    - Used to access MongoDB
+- [MongoDB](https://www.mongodb.com/3)
+    - MongoDb was the database used to store all the transactions and users
+- [Alpha Advantage API](https://www.alphavantage.co/)
+    - API used to acccess stock prices
+- [jQuery v3.5.1](https://code.jquery.com/)
+    - Used to simplify DOM manipulation
+- [Google Fonts](https://fonts.google.com/)
+    - Merriweather font style was used
+- [Start Bootstrap](https://startbootstrap.com/)
+    - Used the free templates as a starting point
+- [Font Awesome](https://fontawesome.com/)
+
+# Testing
+
+All the tests done to this website can be found in testing.md.
+
+# Deployment
+
+## MongoDB
+
+1.  After login in to [MongoDB](https://account.mongodb.com/), click on the Cluster's link under "Data Storage" on the left of the screen.
+    On the cluster's overview clicked on "Connect".
+
+<img src="static/img/screenshots/mongo/first.png" alt="MongoDB Deployment - Login">
+
+2.  MongoDb provides three ways to connect with. I chose the second option which is to connect the application.
+
+<img src="static/img/screenshots/mongo/second.png" alt="MongoDB Deployment - Connect the aplication">
+
+3.  From the next screen, after selecting "Python" as Driver and "3.6 or later" version, I copied the link provided and changed the <username> and <password>.
+    For security this link was saved on the project's env.py.
+
+<img src="static/img/screenshots/mongo/third.png" alt="MongoDB Deployment - Link">
+
+4.  Finally I instanced PyMongo and passed the application.
+
+```
+mongo=PyMongo(app)
+```
+
+## Heroku
+
+1.  The first thing was to create a requirements.txt and a Procfile as below:
+
+```
+pip3 freeze --local > requirements.txt
+echo web: python app.py > Procfile
+```
+
+2.  Once these files were sucessfuly created I navigated to [Heroku](https://www.heroku.com/) and logged into my account.
+    On the top right side of the screen click on "New" and created a new app.
+  
+<img src="static/img/screenshots/heroku/first_step.JPG" alt="Heroku Deployment - Creating a new app">  
+
+3.  Then I had to chose a name for my app, I decided on "my_broker".
+  
+<img src="static/img/screenshots/heroku/second_step.JPG" alt="Heroku Deployment - Naming the app"> 
+
+4.  After creating the app, I had to connect it with my Github account. In the app's page, navigated to "Deploy" and chose GitHub as my "Deployment Method".
+    In this menu I had to insert the name of my repo on gitHub
+
+<img src="static/img/screenshots/heroku/third_step.JPG" alt="Heroku Deployment - Connect with GitHub"> 
+
+Once connected to my GitHub, Heroku will confirm the app is connected to the repo.
+
+<img src="static/img/screenshots/heroku/third_step_done.JPG" alt="Heroku Deployment Step 3 confirmation"> 
+
+5.  Next step is to conif the environmental variables used on the app. For that I navigated to "Settings" and clicked on "Reveal Config Vars"
+
+<img src="static/img/screenshots/heroku/forth_step.JPG" alt="Heroku Deployment - Config Vars"> 
+
+6.  Now that everything was ready to deploy I navigated back to the "Deploy" page, disabled any automatic deploys and selected the master branch before clicking on "Deploy Branch".
+
+<img src="static/img/screenshots/heroku/fifth_step.JPG" alt="Heroku Deployment - Deployment"> 

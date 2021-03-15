@@ -39,6 +39,7 @@ else:
 
 initial_funds = 10000
 
+
 # Function used to retrieve the username string from session['user']
 def getUsername(session):
     # use the sessions's data from db
@@ -115,6 +116,3 @@ def profit_loss(session):
                 int(item['stock_amount'])), 2))
 
     return sum(profit_loss_lst)
-
-
-

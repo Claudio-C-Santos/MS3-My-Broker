@@ -5,6 +5,6 @@ let total_amount_sell = document.querySelector("#money_amount_sell");
 let selling_price = document.querySelector("#selling_price");
 
 input_amount_sell.addEventListener("input", function() {
-    let incoming = selling_price.value * input_amount_sell.value
+    let incoming = selling_price.value * input_amount_sell.value;
     total_amount_sell.value = incoming.toFixed(3);
-})
+});
