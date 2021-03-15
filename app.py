@@ -95,7 +95,7 @@ def login():
             # confirm password
             if check_password_hash(
             existing_user["password"], request.form.get("password")):
-            session["user"] = request.form.get("username").lower()
+                    session["user"] = request.form.get("username").lower()
                     first_name = mongo.db.users.find_one(
                         {"username": session["user"]})["first_name"]
                     # return template with username,
