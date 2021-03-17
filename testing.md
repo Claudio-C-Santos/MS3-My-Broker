@@ -8,7 +8,7 @@
 
 - [W3C HTML Validation Service](https://validator.w3.org/)
 
-All HTML files were validated via Jigsaw's validation service and the only errors found were due the fact I used Jinja's templates.
+All HTML files were validated via Jigsaw's validation service and the only errors found were due the fact I used templates.
 Bellow is a screenshot of one of the tests.
 
 <img src="static/img/screenshots/testing/html_test.JPG" alt="HTML Validation">
