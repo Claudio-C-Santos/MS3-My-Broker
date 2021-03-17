@@ -68,15 +68,16 @@ def register():
             {"username": session["user"]})["first_name"]
 
         return render_template(
-            "profile.html",
-            username=session["user"],
-            first_name=first_name,
-            transactions=transactions,
-            transaction_lst=transaction_lst(session),
-            stock_aapl=stock_aapl,
-            yesterday=yesterday,
-            funds_available=stringify_number(wallet()),
-            profit_loss=stringify_number(profit_loss(session)))
+                               "profile.html",
+                               username=session["user"],
+                               first_name=first_name,
+                               transactions=transactions,
+                               transaction_lst=transaction_lst(session),
+                               stock_aapl=stock_aapl,
+                               yesterday=yesterday,
+                               funds_available=stringify_number(wallet()),
+                               profit_loss=stringify_number(
+                                   profit_loss(session)))
 
     return render_template("register.html")
 
@@ -94,23 +95,23 @@ def login():
         if existing_user:
             # confirm password
             if check_password_hash(
-            existing_user["password"], request.form.get("password")):
-                    session["user"] = request.form.get("username").lower()
-                    first_name = mongo.db.users.find_one(
-                        {"username": session["user"]})["first_name"]
-                    # return template with username,
-                    # first_name, transactions and stock
-                    # The last two are from API.
-                    return render_template(
-                        "profile.html",
-                        username=session["user"],
-                        first_name=first_name,
-                        transactions=transactions(),
-                        transaction_lst=transaction_lst(session),
-                        stock_aapl=stock_aapl,
-                        yesterday=yesterday,
-                        funds_available=stringify_number(wallet()),
-                        profit_loss=stringify_number(profit_loss(session)))
+                                   existing_user["password"],
+                                   request.form.get("password")):
+                session["user"] = request.form.get("username").lower()
+
+                first_name = mongo.db.users.find_one(
+                    {"username": session["user"]})["first_name"]
+
+                return render_template(
+                    "profile.html",
+                    username=session["user"],
+                    first_name=first_name,
+                    transactions=transactions(),
+                    transaction_lst=transaction_lst(session),
+                    stock_aapl=stock_aapl,
+                    yesterday=yesterday,
+                    funds_available=stringify_number(wallet()),
+                    profit_loss=stringify_number(profit_loss(session)))
             else:
                 # if the password doesn't match
                 flash("Incorrect Username and/or Password")
@@ -120,7 +121,7 @@ def login():
             flash("Incorrect Username and/or Password")
             return redirect(url_for("login"))
 
-    return render_template("login.html")
+        return render_template("login.html")
 
 
 # Decorator to render the profile page and display all the info included
@@ -147,22 +148,22 @@ def profile(username):
 @app.route("/stocks")
 def stocks():
     return render_template("stocks.html",
-                            username=getUsername(session),
-                            stock_aapl=stock_aapl,
-                            yesterday=yesterday,
-                            funds_available=stringify_number(wallet()),
-                            profit_loss=stringify_number(profit_loss(session)))
+                           username=getUsername(session),
+                           stock_aapl=stock_aapl,
+                           yesterday=yesterday,
+                           funds_available=stringify_number(wallet()),
+                           profit_loss=stringify_number(profit_loss(session)))
 
 
 # Decorator used to render the page where the user can purchase stocks
 @app.route("/purchase_stocks")
 def purchaseStocks():
     return render_template("purchase-stocks.html",
-                            username=getUsername(session),
-                            stock_aapl=stock_aapl,
-                            yesterday=yesterday,
-                            funds_available=stringify_number(wallet()),
-                            profit_loss=stringify_number(profit_loss(session)))
+                           username=getUsername(session),
+                           stock_aapl=stock_aapl,
+                           yesterday=yesterday,
+                           funds_available=stringify_number(wallet()),
+                           profit_loss=stringify_number(profit_loss(session)))
 
 
 # Decorator used to process the purchase submitted by the user
@@ -210,13 +211,13 @@ def purchase():
 @app.route('/open-positions')
 def openPositions():
     return render_template("open-positions.html",
-                            username=getUsername(session),
-                            transactions=transactions(),
-                            transaction_lst=transaction_lst(session),
-                            stock_aapl=stock_aapl,
-                            yesterday=yesterday,
-                            funds_available=stringify_number(wallet()),
-                            profit_loss=stringify_number(profit_loss(session)))
+                           username=getUsername(session),
+                           transactions=transactions(),
+                           transaction_lst=transaction_lst(session),
+                           stock_aapl=stock_aapl,
+                           yesterday=yesterday,
+                           funds_available=stringify_number(wallet()),
+                           profit_loss=stringify_number(profit_loss(session)))
 
 
 # Decorator used to process the sell submitted by the user
@@ -321,12 +322,12 @@ def sell(position_id):
         {"_id": ObjectId(position_id)})
 
     return render_template("sell-stocks.html",
-                            username=getUsername(session),
-                            stock_aapl=stock_aapl,
-                            yesterday=yesterday,
-                            funds_available=stringify_number(wallet()),
-                            open_position=open_position,
-                            profit_loss=stringify_number(profit_loss(session)))
+                           username=getUsername(session),
+                           stock_aapl=stock_aapl,
+                           yesterday=yesterday,
+                           funds_available=stringify_number(wallet()),
+                           open_position=open_position,
+                           profit_loss=stringify_number(profit_loss(session)))
 
 
 # Decorator used to render a list of closed positions
@@ -337,14 +338,14 @@ def closedPositions():
     closed_positions = mongo.db.closed_positions.find()
 
     return render_template("closed-positions.html",
-                            username=getUsername(session),
-                            transactions=transactions(),
-                            transaction_lst=transaction_lst(session),
-                            stock_aapl=stock_aapl,
-                            yesterday=yesterday,
-                            funds_available=stringify_number(wallet()),
-                            closed_positions=closed_positions,
-                            profit_loss=stringify_number(profit_loss(session)))
+                           username=getUsername(session),
+                           transactions=transactions(),
+                           transaction_lst=transaction_lst(session),
+                           stock_aapl=stock_aapl,
+                           yesterday=yesterday,
+                           funds_available=stringify_number(wallet()),
+                           closed_positions=closed_positions,
+                           profit_loss=stringify_number(profit_loss(session)))
 
 
 # Decorator used to add funds to the user's avialable funds
