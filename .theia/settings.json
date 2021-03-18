@@ -6,7 +6,6 @@
    "python.terminal.activateEnvironment": false,
    "python.formatting.autopep8Path": "/home/gitpod/.pyenv/shims/autopep8",
    "python.linting.flake8Path": "/home/gitpod/.pyenv/shims/flake8",
-   "cornflakes.linter.executablePath": "/home/gitpod/.pyenv/shims/flake8",
    "files.exclude": {
       "**/.git": true,
       "**/.gitp*": true,
