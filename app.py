@@ -121,7 +121,7 @@ def login():
             flash("Incorrect Username and/or Password")
             return redirect(url_for("login"))
 
-        return render_template("login.html")
+    return render_template("login.html")
 
 
 # Decorator to render the profile page and display all the info included
