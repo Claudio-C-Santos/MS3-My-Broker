@@ -6,7 +6,7 @@ from flask import (
 from alpha_vantage.timeseries import TimeSeries
 from flask_pymongo import PyMongo
 from datetime import date, datetime, timedelta
-from app import app, mongo, app_alpha, stock_aapl
+from support import app, mongo, app_alpha, stock_aapl
 
 # Yesterday Selector
 # Since the API only provides yesterday's stock prices,
